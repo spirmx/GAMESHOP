@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-[#0A0F16] border border-white/10 p-10 rounded-3xl shadow-2xl">
+    <div class="text-center mb-10">
+        <h2 class="text-4xl font-black text-white italic uppercase">JOIN THE <span class="text-blue-500">FLEET</span></h2>
+        <p class="text-slate-500 mt-2">สร้างบัญชีนักบิน เพื่อเริ่มสะสมไอเท็มระดับเทพ</p>
+    </div>
+    <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="space-y-2">
+            <label class="text-xs font-black text-slate-500 uppercase tracking-widest">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <p class="text-red-500 text-[10px]">{{ field.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="md:col-span-2 mt-6">
+            <button type="submit" class="w-full btn-neon text-white font-black py-4 rounded-xl uppercase">Create Account</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

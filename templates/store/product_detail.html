@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<nav class="flex mb-8 text-[10px] font-black uppercase tracking-widest text-slate-500">
+    <a href="{% url 'home' %}" class="hover:text-blue-500 transition">Home</a>
+    <span class="mx-3 text-slate-800">/</span>
+    <a href="#" class="hover:text-blue-500 transition">{{ product.category.name }}</a>
+    <span class="mx-3 text-slate-800">/</span>
+    <span class="text-white italic">{{ product.title }}</span>
+</nav>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-16">
+    <div class="lg:col-span-7">
+        <div class="sticky top-28 space-y-6">
+            <div class="admin-card p-10 overflow-hidden group relative">
+                <div class="absolute inset-0 bg-gradient-to-tr from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="w-full h-auto object-contain transform group-hover:scale-105 transition duration-700 mx-auto" alt="{{ product.title }}">
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="admin-card text-center !p-4 border border-white/5 bg-white/[0.02]">
+                    <p class="text-[8px] font-black text-slate-500 uppercase mb-1">Warranty</p>
+                    <p class="text-xs text-white font-bold italic">3 Years Global</p>
+                </div>
+                <div class="admin-card text-center !p-4 border border-white/5 bg-white/[0.02]">
+                    <p class="text-[8px] font-black text-slate-500 uppercase mb-1">Authentic</p>
+                    <p class="text-xs text-blue-500 font-bold italic">100% Genuine</p>
+                </div>
+                <div class="admin-card text-center !p-4 border border-white/5 bg-white/[0.02]">
+                    <p class="text-[8px] font-black text-slate-500 uppercase mb-1">Brand</p>
+                    <p class="text-xs text-white font-bold italic">Premium Gear</p>
+                </div>
+                <div class="admin-card text-center !p-4 border border-white/5 bg-white/[0.02]">
+                    <p class="text-[8px] font-black text-slate-500 uppercase mb-1">Delivery</p>
+                    <p class="text-xs text-green-400 font-bold italic">Digital Keys</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lg:col-span-5 space-y-10">
+        <div class="space-y-4">
+            <h1 class="text-4xl sm:text-5xl font-black text-white italic leading-tight tracking-tighter uppercase">{{ product.title }}</h1>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full {% if product.stock > 0 %}bg-green-500 animate-pulse{% else %}bg-red-500{% endif %}"></span>
+                    <span class="text-[10px] font-black {% if product.stock > 0 %}text-green-500{% else %}text-red-500{% endif %} uppercase tracking-widest">
+                        {% if product.stock > 0 %}In Stock: {{ product.stock }} Units{% else %}Sold Out{% endif %}
+                    </span>
+                </div>
+                <span class="text-slate-600 text-[10px] font-black uppercase">SKU: PP-{{ product.id|add:1000 }}</span>
+            </div>
+        </div>
+
+        <div class="admin-card !p-10 bg-gradient-to-br from-blue-600/20 to-[#0A0F16] border-blue-500/20 shadow-2xl relative overflow-hidden">
+            <div class="relative z-10">
+                <p class="text-blue-400 text-xs font-black uppercase tracking-[0.2em] mb-2">Special Gamer Price</p>
+                <div class="flex items-baseline gap-5">
+                    <span class="text-6xl font-black text-white italic tracking-tighter">฿{{ product.price }}</span>
+                    <span class="text-slate-500 line-through text-xl italic opacity-50">฿{{ product.price|add:990 }}</span>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+                    <form action="{% url 'cart:add_to_cart' product.id %}" method="POST" class="contents">
+                        {% csrf_token %}
+                        <button type="submit" name="buy_now" class="btn-neon !py-5 text-sm">BUY NOW</button>
+                        <button type="submit" class="flex items-center justify-center bg-white/5 hover:bg-white/10 text-white font-black py-5 rounded-2xl transition-all border border-white/10 uppercase tracking-[0.2em] text-sm">ADD TO CART</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <h4 class="text-xl font-black text-white italic uppercase tracking-widest border-b border-white/5 pb-4">📋 Technical <span class="text-blue-500">Specifications</span></h4>
+            <div class="grid grid-cols-1 gap-1">
+                <div class="flex justify-between py-4 px-6 bg-white/[0.03] rounded-xl border border-white/5">
+                    <span class="text-slate-500 text-xs font-bold uppercase">Item Category</span>
+                    <span class="text-white text-xs font-black">{{ product.category.name }}</span>
+                </div>
+                <div class="flex justify-between py-4 px-6 bg-transparent">
+                    <span class="text-slate-500 text-xs font-bold uppercase">Platform Support</span>
+                    <span class="text-white text-xs font-black">PC / Mac / Console</span>
+                </div>
+                <div class="flex justify-between py-4 px-6 bg-white/[0.03] rounded-xl border border-white/5">
+                    <span class="text-slate-500 text-xs font-bold uppercase">Activation Method</span>
+                    <span class="text-white text-xs font-black">Instant Digital Code</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

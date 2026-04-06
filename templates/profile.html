@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-10 flex items-center justify-between">
+        <h1 class="text-4xl font-black text-white italic uppercase">GAMER <span class="text-blue-500">PROFILE</span></h1>
+        <div class="bg-blue-600/20 border border-blue-500/30 px-4 py-1 rounded-full text-blue-400 text-xs font-bold uppercase tracking-widest">
+            Member since: {{ user.date_joined|date:"M Y" }}
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="admin-card text-center flex flex-col items-center">
+            <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-4xl font-black text-white mb-4 shadow-xl shadow-blue-600/20">
+                {{ user.username|first|upper }}
+            </div>
+            <h2 class="text-2xl font-bold text-white">@{{ user.username }}</h2>
+            <p class="text-slate-500 text-sm mb-6">{{ user.email }}</p>
+            
+            {% if user.is_staff %}
+                <span class="bg-yellow-500 text-black text-[10px] font-black px-3 py-1 rounded-full uppercase">Administrator</span>
+            {% else %}
+                <span class="bg-slate-800 text-slate-400 text-[10px] font-black px-3 py-1 rounded-full uppercase">Player</span>
+            {% endif %}
+        </div>
+
+        <div class="lg:col-span-2 space-y-6">
+            <div class="admin-card">
+                <h3 class="text-lg font-bold text-white mb-6 border-b border-white/5 pb-2">รายละเอียดการติดต่อ</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-[10px] font-black text-slate-500 uppercase">เบอร์โทรศัพท์</label>
+                        <p class="text-white font-medium">{{ user.phone_number|default:"- ไม่ได้ระบุ -" }}</p>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-slate-500 uppercase">สถานะผู้ขาย</label>
+                        <p class="{% if user.is_seller %}text-green-400{% else %}text-slate-400{% endif %} font-medium">
+                            {% if user.is_seller %}ยืนยันตัวตนแล้ว{% else %}ทั่วไป{% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <h3 class="text-lg font-bold text-white mb-6 border-b border-white/5 pb-2">ที่อยู่จัดส่ง</h3>
+                <p class="text-white leading-relaxed">
+                    {{ user.address|default:"ยังไม่มีข้อมูลที่อยู่" }}<br>
+                    {% if user.city %}{{ user.city }}, {{ user.postal_code }}{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+<nav class="bg-[#0A0F16]/90 backdrop-blur-2xl border-b border-white/10 sticky top-0 z-50 w-full" 
+     x-data="{ mobileMenu: false, profileOpen: false, gamesOpen: false, itemsOpen: false }">
+    
+    <div class="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-10 py-3 flex items-center justify-between gap-4">
+        
+        <div class="flex items-center gap-10">
+            <a href="{% url 'home' %}" class="text-2xl sm:text-3xl font-black text-white italic tracking-tighter hover:scale-105 transition-transform shrink-0">
+                PAPAYA<span class="text-blue-500">SHOP</span>
+            </a>
+            
+            <div class="hidden xl:flex items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
+                <a href="{% url 'home' %}" class="hover:text-blue-400 transition-colors">Home</a>
+                
+                <div class="relative py-4" @mouseenter="gamesOpen = true" @mouseleave="gamesOpen = false">
+                    <button class="hover:text-blue-400 transition-colors flex items-center gap-1">
+                        Games <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div x-show="gamesOpen" x-transition class="absolute top-12 left-0 w-48 bg-[#0B0F19] border border-white/5 rounded-xl shadow-2xl py-2 z-50">
+                        <a href="{% url 'home' %}?platform=pc" class="block px-5 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white transition">🖥️ PC Games</a>
+                        <a href="{% url 'home' %}?platform=mobile" class="block px-5 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white transition">📱 Mobile Games</a>
+                    </div>
+                </div>
+
+                <div class="relative py-4" @mouseenter="itemsOpen = true" @mouseleave="itemsOpen = false">
+                    <button class="hover:text-blue-400 transition-colors flex items-center gap-1">
+                        Categories <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div x-show="itemsOpen" x-transition class="absolute top-12 left-0 w-48 bg-[#0B0F19] border border-white/5 rounded-xl shadow-2xl py-2 z-50">
+                        <a href="{% url 'product_list' %}?cat=fps" class="block px-5 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white transition">🎯 FPS Items</a>
+                        <a href="{% url 'product_list' %}?cat=rpg" class="block px-5 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white transition">⚔️ RPG Items</a>
+                        <a href="{% url 'product_list' %}?cat=moba" class="block px-5 py-2.5 text-xs font-bold text-slate-300 hover:bg-white/5 hover:text-white transition">🏰 MOBA Items</a>
+                    </div>
+                </div>
+
+                <a href="{% url 'product_list' %}" class="hover:text-blue-400 transition-colors text-white">Store</a>
+            </div>
+        </div>
+
+        <form action="{% url 'product_list' %}" method="GET" class="hidden md:flex flex-grow max-w-xl relative group">
+            <input type="text" name="q" placeholder="ค้นหาไอเท็ม, คีย์เกม..." 
+                   class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-2.5 text-sm focus:outline-none focus:border-blue-500 transition-all text-white placeholder:text-slate-600">
+        </form>
+
+        <div class="flex items-center gap-3 sm:gap-5">
+            
+            {% if user.is_authenticated %}
+                <a href="{% url 'wallet:top_up' %}" class="hidden sm:flex items-center gap-3 px-4 py-2 rounded-2xl transition-all border border-transparent hover:border-yellow-500/50 hover:bg-yellow-500/5 group">
+                    <div class="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-500 font-black">฿</div>
+                    <div class="text-left leading-none">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-1">Fleet Balance</p>
+                        <p class="text-sm font-black text-white italic">฿{{ user.wallet.balance|default:"0.00" }}</p>
+                    </div>
+                </a>
+
+                <a href="{% url 'cart:cart_detail' %}" class="p-2.5 bg-white/5 border border-white/10 rounded-xl hover:bg-blue-600/20 transition-all relative">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span class="cart-count-badge">{{ user.cart.items.count|default:"0" }}</span>
+                </a>
+            {% endif %}
+
+            <div class="relative">
+                <button @click="profileOpen = !profileOpen" 
+                        class="flex items-center gap-3 bg-white/5 border border-white/10 p-1.5 sm:pl-2 sm:pr-4 rounded-2xl hover:bg-white/10 transition-all shadow-xl group">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center font-black text-xl shadow-inner transition-transform group-hover:rotate-3 {% if user.is_authenticated %}bg-blue-600 text-white{% else %}bg-slate-700 text-slate-400{% endif %}">
+                        {% if user.is_authenticated %}{{ user.username|first|upper }}{% else %}G{% endif %}
+                    </div>
+                    <div class="text-left hidden lg:block">
+                        <p class="text-[9px] font-black text-slate-500 uppercase leading-none mb-1">
+                            {% if user.is_staff %}Commander (ผู้ขาย){% else %}Pilot{% endif %}
+                        </p>
+                        <p class="text-sm font-black text-white italic truncate max-w-[80px]">
+                            {% if user.is_authenticated %}@{{ user.username }}{% else %}GUEST{% endif %}
+                        </p>
+                    </div>
+                </button>
+
+                <div x-show="profileOpen" @click.away="profileOpen = false" x-transition class="premium-dropdown absolute right-0 mt-3 w-64 py-2 z-50">
+                    <div class="px-5 py-3 mb-2 bg-[#05070A]/50 border-b border-white/5">
+                        <p class="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1">Account Status</p>
+                        <p class="text-sm font-bold text-white">{% if user.is_authenticated %}@{{ user.username }}{% else %}Unknown Guest{% endif %}</p>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}" class="dropdown-item item-profile">
+                            <span class="text-lg">👤</span> Edit Profile
+                        </a>
+                        
+                        {% if user.is_staff %}
+                        <a href="{% url 'admin_dashboard' %}" class="dropdown-item item-commander">
+                            <span class="text-lg">🖥️</span> Admin Panel
+                        </a>
+                        <a href="{% url 'orders:all_transactions' %}" class="dropdown-item item-commander" style="opacity: 0.8;">
+                            <span class="text-lg">📑</span> Global History
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'orders:order_list' %}" class="dropdown-item item-history">
+                            <span class="text-lg">📦</span> Order History
+                        </a>
+                        
+                        <form action="{% url 'logout' %}" method="POST" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item item-logout w-full text-left">
+                                <span class="text-lg">🚀</span> Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn-neon text-center mx-4 my-2 block !py-3">
+                            LOGIN TO FLEET
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="xl:hidden p-2 text-white">
+                <span class="text-2xl" x-show="!mobileMenu">☰</span>
+                <span class="text-2xl" x-show="mobileMenu">✕</span>
+            </button>
+        </div>
+    </div>
+</nav>

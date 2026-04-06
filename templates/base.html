@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>PAPAYA GAME SHOP | ยานแม่ของเหล่าเกมเมอร์</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="stars-moving text-slate-200 min-h-screen flex flex-col antialiased">
+    
+    {% include 'includes/navbar.html' %}
+
+    <main class="flex-grow w-[95%] max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-12">
+        
+        {% if messages %}
+            <div class="space-y-4 mb-8">
+                {% for message in messages %}
+                    <div class="alert-box {{ message.tags }} p-4 rounded-2xl text-white font-black shadow-2xl animate-fade-in flex items-center justify-between border border-white/10">
+                        <span class="text-sm sm:text-base">{{ message }}</span>
+                        <button class="opacity-50 hover:opacity-100" onclick="this.parentElement.remove()">✕</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+        
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/api.js' %}"></script>
+</body>
+</html>

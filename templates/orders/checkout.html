@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-[1300px] mx-auto py-12 px-4">
+    <div class="mb-10">
+        <h1 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter">FLEET <span class="text-indigo-500">CHECKOUT</span></h1>
+    </div>
+
+    <form method="POST" action="{% url 'orders:place_order' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {% csrf_token %}
+        
+        <div class="lg:col-span-8 space-y-8">
+            <div class="admin-card">
+                <h4 class="text-lg font-black text-white mb-6 uppercase italic tracking-widest">01 Mission Cargo</h4>
+                
+                <div class="py-4">
+                    <p class="text-4xl md:text-5xl font-black text-white italic tabular-nums tracking-tighter">฿{{ cart.total_price|default:"0.00" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-4 sticky top-28 h-fit space-y-8">
+            <div class="summary-card p-8">
+                <h4 class="text-lg font-black text-white uppercase italic tracking-widest mb-8">02 Authorization</h4>
+                
+                <div class="bg-[#05070A] p-6 rounded-2xl mb-6 border border-white/5">
+                    <span class="block text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2">Grand Total</span>
+                    <span class="block text-3xl md:text-4xl font-black text-white italic tracking-tighter tabular-nums truncate">
+                        ฿{{ cart.total_price|default:"0.00" }}
+                    </span>
+                </div>
+                
+                <div class="p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-xl mb-8">
+                    <p class="text-[9px] text-yellow-500/80 font-black uppercase tracking-widest">
+                        * ชำระผ่านระบบ Wallet (ดูแลโดยผู้ขาย)
+                    </p>
+                </div>
+
+                <button type="submit" class="btn-neon w-full">Authorize Payment &rarr;</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

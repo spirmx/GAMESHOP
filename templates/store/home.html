@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="max-w-[1800px] mx-auto space-y-16 sm:space-y-24 py-6 px-4">
+    
+    <div class="text-center py-16 sm:py-24 bg-gradient-to-b from-blue-600/10 to-transparent rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden">
+        <div class="relative z-10">
+            <h1 class="text-5xl sm:text-8xl font-black text-white mb-6 italic tracking-tighter uppercase leading-none">
+                LEVEL UP YOUR <span class="text-blue-500">GAME</span>
+            </h1>
+            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[10px] sm:text-xs">
+                ศูนย์รวมไอเท็มดิจิทัลและคีย์เกมระดับพรีเมียม
+            </p>
+        </div>
+        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-blue-600/20 blur-[120px] rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="admin-card !p-8 bg-gradient-to-r from-blue-900/30 to-transparent border-blue-500/20 relative overflow-hidden group cursor-pointer">
+            <div class="relative z-10">
+                <span class="bg-red-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg shadow-red-500/20">🔥 Flash Sale</span>
+                <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter mb-2">Valorant Point</h3>
+                <p class="text-blue-400 font-bold text-sm">ลดราคาพิเศษ 20% ทุกแพ็กเกจ วันนี้เท่านั้น!</p>
+            </div>
+            <div class="absolute -right-10 -bottom-10 opacity-20 group-hover:scale-110 transition-transform duration-500">
+                <span class="text-9xl">🔫</span>
+            </div>
+        </div>
+
+        <div class="admin-card !p-8 bg-gradient-to-r from-purple-900/30 to-transparent border-purple-500/20 relative overflow-hidden group cursor-pointer">
+            <div class="relative z-10">
+                <span class="bg-purple-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg shadow-purple-500/20">✨ New Arrival</span>
+                <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter mb-2">Genshin Crystals</h3>
+                <p class="text-purple-400 font-bold text-sm">แพ็กเกจพรแห่งดวงจันทร์เข้าแล้ว ช้อปเลย!</p>
+            </div>
+            <div class="absolute -right-10 -bottom-10 opacity-20 group-hover:scale-110 transition-transform duration-500">
+                <span class="text-9xl">💎</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3 sm:gap-6">
+        <a href="{% url 'home' %}" class="px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 transition-all font-black uppercase text-[10px] tracking-widest {% if not request.GET.cat %}border-blue-500 text-white bg-blue-600/20 shadow-lg shadow-blue-600/20{% endif %}">
+            ALL GAMES
+        </a>
+        <a href="?cat=PC FPS" class="px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 transition-all font-black uppercase text-[10px] tracking-widest {% if request.GET.cat == 'PC FPS' %}border-blue-500 text-white bg-blue-600/20 shadow-lg shadow-blue-600/20{% endif %}">
+            🖥️ PC GAMES
+        </a>
+        <a href="?cat=Mobile MOBA" class="px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 transition-all font-black uppercase text-[10px] tracking-widest {% if request.GET.cat == 'Mobile MOBA' %}border-blue-500 text-white bg-blue-600/20 shadow-lg shadow-blue-600/20{% endif %}">
+            📱 MOBILE GAMES
+        </a>
+    </div>
+
+    <div class="space-y-10">
+        <div class="flex items-center gap-4">
+            <h2 class="text-2xl font-black text-white italic uppercase tracking-tighter shrink-0">
+                🎮 CHOOSE <span class="text-blue-500">YOUR GAME</span>
+            </h2>
+            <div class="flex-grow h-[1px] bg-white/5"></div>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 sm:gap-8">
+            {% for game in games %}
+            <a href="{% url 'game_detail' game.slug %}" class="group relative aspect-square rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl hover:border-blue-500/50 transition-all duration-500 hover:-translate-y-3">
+                {% if game.logo %}
+                    <img src="{{ game.logo.url }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-1000 opacity-70 group-hover:opacity-100">
+                {% else %}
+                    <div class="absolute inset-0 bg-[#0B0F19]"></div>
+                {% endif %}
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-[#030508] via-[#0A0F16]/40 to-transparent"></div>
+                
+                <div class="absolute bottom-6 left-6 right-6 z-10">
+                    <h3 class="text-xl font-black text-white italic leading-tight uppercase tracking-tighter truncate">{{ game.name }}</h3>
+                    <p class="text-[8px] font-bold text-blue-500 uppercase tracking-widest mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Select Store →</p>
+                </div>
+            </a>
+            {% empty %}
+            <p class="col-span-full text-center text-slate-600 py-10 font-bold uppercase italic">No games matching your fleet...</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="space-y-10">
+        <div class="flex items-center justify-between border-b border-white/5 pb-6">
+            <h2 class="text-2xl font-black text-white italic uppercase tracking-tighter">
+                🛍️ HOT <span class="text-blue-500">ITEMS</span>
+            </h2>
+            <a href="{% url 'product_list' %}" class="text-[10px] font-black text-slate-500 hover:text-white uppercase tracking-widest transition">
+                View All Items →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {% for product in products|slice:":4" %}
+                {% include 'includes/product_card.html' %}
+            {% empty %}
+            <div class="col-span-full py-20 text-center bg-white/[0.02] rounded-[3rem] border border-dashed border-white/10">
+                <p class="text-slate-600 font-bold uppercase tracking-[0.3em] text-sm">
+                    ไม่พบไอเท็มฮอตในคลังแสง...
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

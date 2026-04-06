@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-[1200px] mx-auto py-10 px-4 space-y-12">
+    <h1 class="text-5xl font-black text-white italic uppercase tracking-tighter">Fleet <span class="text-blue-500">Credits</span></h1>
+
+    <form method="POST" action="{% url 'wallet:process_topup' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        {% csrf_token %}
+        <div class="lg:col-span-8 space-y-10">
+            <section class="space-y-6">
+                <h2 class="text-xl font-black text-white uppercase italic">2. Select Payment Method</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="method" value="promptpay" class="peer hidden" checked>
+                        <div class="admin-card border-2 border-transparent peer-checked:border-blue-500">
+                             <span class="font-bold text-white">PromptPay (Auto Verify)</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="method" value="direct" class="peer hidden">
+                        <div class="admin-card border-2 border-transparent peer-checked:border-yellow-500">
+                             <span class="font-bold text-white">Direct Transfer (Manual)</span>
+                        </div>
+                    </label>
+                </div>
+            </section>
+        </div>
+        </form>
+</div>
+{% endblock %}
