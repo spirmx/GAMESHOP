@@ -4,19 +4,32 @@ from django.contrib import messages
 from django.db import transaction
 from .models import Wallet, WalletTransaction
 from apps.orders.models import Order
+from django.http import HttpResponse
+
+@login_required
+def wallet_home_view(request):
+    """ 🏠 หน้าหลักของกระเป๋าเงิน (แสดงยอดเงินและประวัติ) """
+    wallet, _ = Wallet.objects.get_or_create(user=request.user)
+    transactions = WalletTransaction.objects.filter(wallet=wallet).order_by('-timestamp')[:10]
+    
+    return render(request, 'wallet/wallet_home.html', {
+        'wallet': wallet,
+        'transactions': transactions
+    })
 
 @login_required
 def top_up(request):
-    """ 💳 หน้าเลือกแพ็กเกจเติมเงิน (Midasbuy Style) """
+    """ 💳 หน้าเลือกแพ็กเกจเติมเงิน """
+    wallet, _ = Wallet.objects.get_or_create(user=request.user)
     context = {
         'price_list': [100, 300, 500, 1000, 3000, 5000],
-        'wallet': request.user.wallet
+        'wallet': wallet
     }
     return render(request, 'wallet/top_up.html', context)
 
 @login_required
 def process_topup(request):
-    """ 🔄 ประมวลผลการกดเติมเงินเพื่อไปหน้า QR Code """
+    """ 🔄 หน้าแสดง QR Code/ยืนยันการเติมเงิน """
     if request.method == "POST":
         amount = request.POST.get('amount')
         context = {
@@ -24,37 +37,34 @@ def process_topup(request):
             'transaction_id': f"PY-{request.user.id}-RCG"
         }
         return render(request, 'wallet/payment_confirmation.html', context)
-    return redirect('wallet:top_up')
+    
+    return redirect('wallets:top_up')
 
 @login_required
 def payment_page(request, order_id):
-    """ 💰 หักเงินจาก Wallet จริงสำหรับซื้อสินค้า """
-    # 🚨 แก้ไขจุดที่ 1: เปลี่ยนจาก user= เป็น buyer= ตามที่ระบบแจ้ง Choices มาให้
+    """ 💰 ฟังก์ชันหักเงินจริงออกจาก Wallet """
     order = get_object_or_404(Order, id=order_id, buyer=request.user)
-    
-    # ดึงกระเป๋าเงิน (ใช้ get_or_create เพื่อความปลอดภัย)
     wallet, _ = Wallet.objects.get_or_create(user=request.user)
 
     if request.method == "POST" and request.POST.get('method') == 'wallet':
         try:
-            # ใช้ transaction.atomic เพื่อความปลอดภัยสูงสุดในการหักเงิน
             with transaction.atomic():
-                # select_for_update() ป้องกันการหักเงินซ้ำซ้อนในเวลาเดียวกัน (Race Condition)
+                # ป้องกัน Race Condition
                 curr_wallet = Wallet.objects.select_for_update().get(id=wallet.id)
                 
                 if curr_wallet.balance >= order.total_price:
-                    # 1. หักเงินออกจากกระเป๋า
+                    # 1. หักเงิน
                     curr_wallet.balance -= order.total_price
                     curr_wallet.save()
                     
-                    # 2. บันทึกประวัติการทำรายการ
+                    # 2. บันทึกประวัติ (ใช้ฟิลด์ timestamp อัตโนมัติ)
                     WalletTransaction.objects.create(
                         wallet=curr_wallet, 
                         transaction_type='WITHDRAW', 
                         amount=order.total_price
                     )
                     
-                    # 3. อัปเดตสถานะการสั่งซื้อ
+                    # 3. จบ Order
                     order.status = 'SUCCESS'
                     order.save()
                     
@@ -62,7 +72,7 @@ def payment_page(request, order_id):
                     return redirect('orders:order_detail', order_id=order.id)
                 else:
                     messages.error(request, "❌ INSUFFICIENT CREDITS: ยอดเงินไม่เพียงพอ")
-                    return redirect('wallet:top_up')
+                    return redirect('wallets:top_up')
                     
         except Exception as e:
             messages.error(request, f"⚠️ SYSTEM ERROR: {str(e)}")

@@ -9,7 +9,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================================================
 SECRET_KEY = 'django-insecure-papaya-shop-master-key-2026'
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+
+# ✅ อนุญาตให้เข้าถึงจาก ngrok และ localhost
+ALLOWED_HOSTS = ['*'] 
+
+# 🚀 NGROK & CSRF FIX: เพิ่มเพื่อให้ล็อกอินผ่านลิงก์ภายนอกได้
+# ถ้า ngrok เปลี่ยนลิงก์ ให้เอาโดเมนใหม่มาอัปเดตตรงนี้ครับ
+CSRF_TRUSTED_ORIGINS = [
+    'https://6634-2001-44c8-4161-3987-ec46-3609-37a5-4296.ngrok-free.app',
+]
+
+# ✅ ตั้งค่า Session ให้ทำงานผ่าน HTTP ธรรมดาได้ (เหมาะสำหรับการทดสอบผ่าน Tunnel)
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False # ช่วยให้บางเบราว์เซอร์จัดการ Cookie ได้ง่ายขึ้นขณะทดสอบ
 
 # =========================================================
 # 📦 INSTALLED APPS
@@ -21,21 +34,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.humanize',  # ✅ เสริม: สำหรับจัดรูปแบบตัวเลข/เงิน (เช่น ฿1,000)
+    'django.contrib.humanize',
 
     # 🎮 PAPAYA GAME SHOP APPS
-    'apps.users',      # ระบบสมาชิก
-    'apps.store',      # คลังสินค้าและเกม
-    'apps.orders',     # ระบบสั่งซื้อ
-    'apps.wallets',    # กระเป๋าเงิน
-    'apps.analytics',  # ระบบวิเคราะห์ข้อมูล
-    'apps.cart',       # ตะกร้าสินค้า (ต้องอยู่ในโฟลเดอร์ apps/)
+    'apps.users',      
+    'apps.store',      
+    'apps.orders',     
+    'apps.wallets',    
+    'apps.analytics',  
+    'apps.cart',       
 ]
 
 # =========================================================
 # 🧠 AUTHENTICATION & USER MODEL
 # =========================================================
-AUTH_USER_MODEL = 'users.CustomUser' #
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # =========================================================
 # 🛠️ MIDDLEWARE
@@ -44,25 +57,20 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', # 🚨 ตัวควบคุมการล็อกอิน
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# =========================================================
-# 🔗 URL & WSGI CONFIG
-# =========================================================
-ROOT_URLCONF = 'Project311.urls' #
+# ... (ส่วนที่เหลือคงเดิมตามที่คุณส่งมา) ...
+ROOT_URLCONF = 'Project311.urls'
 WSGI_APPLICATION = 'Project311.wsgi.application'
 
-# =========================================================
-# 🎨 TEMPLATES
-# =========================================================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], #
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,9 +83,6 @@ TEMPLATES = [
     },
 ]
 
-# =========================================================
-# 🗄️ DATABASE (SQLite)
-# =========================================================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -85,33 +90,20 @@ DATABASES = {
     }
 }
 
-# =========================================================
-# 🌍 INTERNATIONALIZATION (ภาษาและเวลาไทย)
-# =========================================================
 LANGUAGE_CODE = 'th-th'
 TIME_ZONE = 'Asia/Bangkok'
 USE_I18N = True
 USE_TZ = True
 
-# =========================================================
-# 📁 STATIC & MEDIA FILES
-# =========================================================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# =========================================================
-# 🔑 LOGIN/LOGOUT REDIRECTS
-# =========================================================
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
 
-# =========================================================
-# ✨ MESSAGE TAGS (เสริม: เพื่อให้ Alert แสดงผลสีตรงกับ Tailwind/CSS)
-# =========================================================
 MESSAGE_TAGS = {
     messages.DEBUG: 'bg-slate-500',
     messages.INFO: 'bg-blue-500',
@@ -120,9 +112,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'bg-red-500',
 }
 
-# =========================================================
-# 📊 LOGGING (เสริม: รองรับโฟลเดอร์ logs ของคุณ)
-# =========================================================
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

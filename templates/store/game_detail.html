@@ -44,16 +44,18 @@
             {% for product in products %}
             <div class="group bg-[#0A0F16] border border-white/5 rounded-[2.5rem] overflow-hidden hover:border-blue-500/50 transition-all duration-500 shadow-2xl flex flex-col h-full">
                 
-                <div class="relative aspect-[16/10] bg-white/5 overflow-hidden">
+                <a href="{% url 'product_detail' product.id %}" class="block overflow-hidden bg-white/5 aspect-[16/10]">
                     {% if product.image %}
                         <img src="{{ product.image.url }}" class="w-full h-full object-contain p-8 transform group-hover:scale-110 transition duration-700" alt="{{ product.title }}">
                     {% endif %}
-                </div>
+                </a>
 
                 <form action="{% url 'cart:add_to_cart' product.id %}" method="POST" class="p-8 space-y-6 flex-grow flex flex-col">
                     {% csrf_token %}
                     <div class="flex-grow">
-                        <h3 class="text-xl font-bold text-white mb-3 line-clamp-2 min-h-[3.5rem] group-hover:text-blue-400 transition">{{ product.title }}</h3>
+                        <a href="{% url 'product_detail' product.id %}" class="block group/title">
+                            <h3 class="text-xl font-bold text-white mb-3 line-clamp-2 min-h-[3.5rem] group-hover/title:text-blue-400 transition">{{ product.title }}</h3>
+                        </a>
                         <p class="text-slate-500 text-sm leading-relaxed">{{ product.description|truncatewords:15 }}</p>
                     </div>
 
@@ -63,23 +65,25 @@
                                 📱 ข้อมูลตัวละคร (Mobile Game)
                             </label>
                             <input type="text" name="player_uid" required placeholder="ระบุ UID (เช่น 12345678)" 
-                                   class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 transition">
+                                   class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 transition shadow-inner">
                         </div>
                     {% endif %}
 
                     <div class="flex items-end justify-between gap-4 border-t border-white/5 pt-6 mt-4">
                         <div>
                             <p class="text-slate-600 text-[9px] font-black uppercase mb-1">Price</p>
-                            <p class="text-3xl cyber-num truncate">฿{{ product.price }}</p>
+                            <p class="text-3xl cyber-num truncate">฿{{ product.price|floatformat:2 }}</p>
                         </div>
-                        <button type="submit" class="btn-neon !py-3 !px-6 text-[10px]">
-                            🛒 ADD TO CARGO
+                        <button type="submit" class="btn-neon !py-3 !px-6 text-[10px] uppercase tracking-widest">
+                            🛒 Add to Cargo
                         </button>
                     </div>
                 </form>
             </div>
             {% empty %}
-            <p class="col-span-full text-center text-slate-500 py-20 font-black uppercase tracking-widest">No equipment found in this sector.</p>
+            <div class="col-span-full py-20 text-center bg-white/[0.02] rounded-[3rem] border border-dashed border-white/10">
+                <p class="text-slate-500 font-black uppercase tracking-widest text-sm">No equipment found in this sector.</p>
+            </div>
             {% endfor %}
         </div>
     </div>

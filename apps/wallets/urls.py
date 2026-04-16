@@ -1,11 +1,11 @@
-# apps/wallets/urls.py
 from django.urls import path
 from . import views
 
-app_name = 'wallet'
+app_name = 'wallets' 
 
 urlpatterns = [
+    path('home/', views.wallet_home_view, name='wallet_home'),
     path('top-up/', views.top_up, name='top_up'),
-    path('process-topup/', views.process_topup, name='process_topup'), # 🚨 เพิ่มบรรทัดนี้
-    path('payment/<int:order_id>/', views.payment_page, name='payment_page'),
+    path('process/', views.process_topup, name='process_topup'),
+    path('pay/<int:order_id>/', views.payment_page, name='payment_page'),
 ]

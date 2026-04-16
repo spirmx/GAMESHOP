@@ -18,7 +18,7 @@ def place_order(request):
     if request.method == 'POST':
         cart = get_object_or_404(Cart, user=request.user)
         
-        # 1. เช็กสต็อกอีกรอบก่อนให้ซื้อ (ป้องกันกรณีคนแย่งกันกดซื้อแล้วของหมดพอดี)
+        # 1. เช็กสต็อกอีกรอบก่อนให้ซื้อ
         for item in cart.items.all():
             if item.product.stock < item.quantity:
                 messages.error(request, f"สั่งซื้อล้มเหลว! ไอเท็ม '{item.product.title}' มีสต็อกไม่พอ (เหลือ {item.product.stock} ชิ้น)")
@@ -46,7 +46,8 @@ def place_order(request):
         # 5. ล้างตะกร้า
         cart.items.all().delete()
         
-        return redirect('wallet:payment_page', order_id=order.id)
+        # ✅ แก้ไขจาก 'wallet:' เป็น 'wallets:' ให้ตรงกับ Namespace ในไฟล์หลัก
+        return redirect('wallets:payment_page', order_id=order.id)
     
     return redirect('cart:cart_detail')
 

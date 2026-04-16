@@ -1,43 +1,175 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-[1300px] mx-auto py-12 px-4">
-    <div class="mb-10">
-        <h1 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter">FLEET <span class="text-indigo-500">CHECKOUT</span></h1>
+
+<div class="max-w-[1350px] mx-auto py-14 px-4 mb-20">
+
+```
+<!-- 🔥 HERO HEADER -->
+<div class="mb-16 border-l-4 border-indigo-500 pl-6">
+
+    <h1 class="text-5xl md:text-7xl font-black italic uppercase leading-[0.9] tracking-tight
+               bg-gradient-to-r from-white via-indigo-300 to-indigo-500 
+               bg-clip-text text-transparent
+               drop-shadow-[0_0_25px_rgba(99,102,241,0.5)]">
+        FLEET CHECKOUT
+    </h1>
+
+    <p class="text-slate-400 font-semibold uppercase tracking-[0.25em] text-sm mt-4 italic">
+        ยืนยันรายการจัดซื้อและตรวจสอบระบบอาวุธในคลังแสง
+    </p>
+
+</div>
+
+<form method="POST" action="{% url 'orders:place_order' %}" 
+      class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+    {% csrf_token %}
+    
+    <!-- 🔥 LEFT -->
+    <div class="lg:col-span-8 space-y-6">
+
+        <div class="flex items-center gap-3 mb-3">
+            <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-md">01</span>
+            <h4 class="text-lg font-bold text-white uppercase tracking-wide">
+                Mission Cargo
+            </h4>
+        </div>
+
+        <!-- 🔥 ITEM CARD -->
+        <div class="overflow-hidden border border-white/5 bg-[#0A0F16]/50 backdrop-blur-xl rounded-3xl
+                    shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+
+            <div class="divide-y divide-white/5">
+
+                {% for item in cart.items.all %}
+                <div class="group p-6 flex flex-col sm:flex-row items-center justify-between gap-6
+                            transition-all duration-500 hover:bg-white/[0.03]
+                            hover:shadow-[0_10px_40px_rgba(99,102,241,0.2)]">
+
+                    <!-- LEFT -->
+                    <div class="flex items-center gap-5 w-full sm:w-auto">
+
+                        <div class="w-20 h-20 bg-black rounded-xl flex items-center justify-center p-3 
+                                    border border-white/5 shrink-0
+                                    group-hover:scale-105 transition">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" class="w-full h-full object-contain">
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <p class="text-xs font-bold text-indigo-400 uppercase tracking-wide mb-1">
+                                {{ item.product.category.game.name|default:"DIGITAL ITEM" }}
+                            </p>
+
+                            <h3 class="text-white font-bold text-lg uppercase italic leading-tight">
+                                {{ item.product.title }}
+                            </h3>
+
+                            <p class="text-xs text-slate-400 mt-2 uppercase tracking-wide">
+                                Unit Price: 
+                                <span class="text-white font-semibold">฿{{ item.product.price|floatformat:2 }}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <div class="flex items-center justify-between w-full sm:w-auto gap-10
+                                border-t sm:border-0 border-white/5 pt-4 sm:pt-0">
+
+                        <div class="text-center">
+                            <p class="text-xs text-slate-500 uppercase mb-1">Qty</p>
+                            <p class="text-xl font-black text-white italic">{{ item.quantity }}</p>
+                        </div>
+
+                        <div class="text-right">
+                            <p class="text-xs text-slate-500 uppercase mb-1">Subtotal</p>
+                            <p class="text-2xl font-black text-white">
+                                ฿{{ item.subtotal|floatformat:2 }}
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- 🔥 TOTAL -->
+            <div class="p-6 bg-white/[0.03] border-t border-white/5 flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
+                    Cargo Total Value
+                </span>
+                <span class="text-3xl font-black text-white italic tracking-tight">
+                    ฿{{ cart.total_price|floatformat:2 }}
+                </span>
+            </div>
+        </div>
     </div>
 
-    <form method="POST" action="{% url 'orders:place_order' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {% csrf_token %}
-        
-        <div class="lg:col-span-8 space-y-8">
-            <div class="admin-card">
-                <h4 class="text-lg font-black text-white mb-6 uppercase italic tracking-widest">01 Mission Cargo</h4>
-                
-                <div class="py-4">
-                    <p class="text-4xl md:text-5xl font-black text-white italic tabular-nums tracking-tighter">฿{{ cart.total_price|default:"0.00" }}</p>
+    <!-- 🔥 RIGHT -->
+    <div class="lg:col-span-4">
+        <div class="sticky top-28 space-y-6">
+
+            <div class="flex items-center gap-3 mb-3">
+                <span class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-md">02</span>
+                <h4 class="text-lg font-bold text-white uppercase tracking-wide">
+                    Authorization
+                </h4>
+            </div>
+
+            <!-- 🔥 SUMMARY -->
+            <div class="relative p-8 border border-indigo-500/20 rounded-3xl 
+                        bg-[#0A0F16]/70 backdrop-blur-xl
+                        shadow-[0_0_60px_rgba(99,102,241,0.15)] space-y-6 overflow-hidden">
+
+                <!-- Glow -->
+                <div class="absolute top-0 right-0 w-40 h-40 bg-indigo-500/10 blur-[80px] rounded-full"></div>
+
+                <div class="relative z-10 space-y-6">
+
+                    <div class="bg-black/70 p-6 rounded-2xl border border-white/5">
+                        <span class="block text-slate-500 text-xs uppercase mb-2">
+                            Payable Amount
+                        </span>
+                        <span class="block text-5xl font-black text-white italic tracking-tight
+                                     drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                            ฿{{ cart.total_price|floatformat:2 }}
+                        </span>
+                    </div>
+
+                    <!-- PAYMENT -->
+                    <div class="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-xl">
+                        <p class="text-xs text-indigo-400 uppercase tracking-wide">
+                            Method: Wallet Transfer<br>
+                            <span class="text-slate-500 normal-case text-[11px]">
+                                * ระบบจะหักเครดิตอัตโนมัติ
+                            </span>
+                        </p>
+                    </div>
+
+                    <!-- BUTTON -->
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-indigo-500 to-indigo-600 
+                        hover:from-indigo-400 hover:to-indigo-500
+                        text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest
+                        transition-all duration-300 hover:-translate-y-1
+                        shadow-lg shadow-indigo-500/30">
+                        Authorize Payment →
+                    </button>
+                    
+                    <a href="{% url 'cart:cart_detail' %}"
+                       class="block text-center text-xs text-slate-500 hover:text-white transition uppercase">
+                        ← Return to Cargo Bay
+                    </a>
+
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="lg:col-span-4 sticky top-28 h-fit space-y-8">
-            <div class="summary-card p-8">
-                <h4 class="text-lg font-black text-white uppercase italic tracking-widest mb-8">02 Authorization</h4>
-                
-                <div class="bg-[#05070A] p-6 rounded-2xl mb-6 border border-white/5">
-                    <span class="block text-slate-500 text-[10px] font-black uppercase tracking-widest mb-2">Grand Total</span>
-                    <span class="block text-3xl md:text-4xl font-black text-white italic tracking-tighter tabular-nums truncate">
-                        ฿{{ cart.total_price|default:"0.00" }}
-                    </span>
-                </div>
-                
-                <div class="p-4 bg-yellow-500/5 border border-yellow-500/10 rounded-xl mb-8">
-                    <p class="text-[9px] text-yellow-500/80 font-black uppercase tracking-widest">
-                        * ชำระผ่านระบบ Wallet (ดูแลโดยผู้ขาย)
-                    </p>
-                </div>
+</form>
+```
 
-                <button type="submit" class="btn-neon w-full">Authorize Payment &rarr;</button>
-            </div>
-        </div>
-    </form>
 </div>
+
 {% endblock %}

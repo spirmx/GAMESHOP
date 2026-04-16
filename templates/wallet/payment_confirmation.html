@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto mt-10 px-4 mb-20">
+    <div class="bg-[#0A0F16] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+        <div class="bg-blue-600 p-8 text-center">
+            <h1 class="text-2xl font-black text-white italic uppercase tracking-widest">Payment Confirmation</h1>
+            <p class="text-blue-100 text-xs mt-1 uppercase tracking-widest opacity-80">กรุณาโอนเงินตามยอดที่ระบุข้างล่างนี้</p>
+        </div>
+
+        <div class="p-8 space-y-8 text-center">
+            <div class="space-y-2">
+                <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.2em]">Total Amount to Pay</p>
+                <h2 class="text-5xl font-black text-white italic">฿{{ amount }}</h2>
+            </div>
+
+            <div class="relative inline-block p-4 bg-white rounded-2xl shadow-inner">
+                <div class="w-48 h-48 bg-slate-100 flex items-center justify-center border-2 border-dashed border-slate-300 rounded-xl">
+                    <span class="text-slate-400 font-bold text-xs">QR CODE HERE</span>
+                </div>
+            </div>
+
+            <div class="bg-white/5 border border-white/5 rounded-2xl p-6 text-left space-y-4">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-slate-500 font-bold uppercase">Transaction ID</span>
+                    <span class="text-blue-400 font-black">{{ transaction_id }}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm border-t border-white/5 pt-4">
+                    <span class="text-slate-500 font-bold uppercase">Account Name</span>
+                    <span class="text-white font-bold">PAPAYA GAME SHOP Co.</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3 pt-4">
+                <a href="{% url 'wallets:wallet_home' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-blue-600/20 uppercase tracking-widest text-sm">
+                    I Have Paid (Verify)
+                </a>
+                <a href="{% url 'wallets:top_up' %}" class="text-slate-500 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">
+                    Cancel Transaction
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

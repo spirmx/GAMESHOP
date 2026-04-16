@@ -1,0 +1,104 @@
+/* โครงสร้างกล่องหลัก */
+.auth-card {
+    background-color: #0A0F16;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    margin: 2.5rem auto 0;
+}
+.auth-card-sm { max-width: 28rem; } /* สำหรับ Login */
+.auth-card-lg { max-width: 42rem; } /* สำหรับ Signup */
+
+/* ช่องกรอกข้อมูล */
+.auth-input {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: white;
+    outline: none;
+    transition: all 0.3s ease;
+}
+.auth-input:focus {
+    border-color: #3b82f6; /* สีน้ำเงินตอนคลิกพิมพ์ */
+}
+
+/* ปุ่มหลัก (Primary Button) */
+.auth-btn-primary {
+    width: 100%;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 900;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    border: none;
+    cursor: pointer;
+}
+.auth-btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+/* เส้นคั่น (Divider) */
+.auth-divider {
+    position: relative;
+    margin: 2rem 0;
+}
+.auth-divider-line {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+}
+.auth-divider-line div {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.auth-divider-text {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 900;
+}
+.auth-divider-text span {
+    background-color: #0A0F16;
+    padding: 0 1rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ปุ่ม Social Login */
+.auth-btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-weight: 700;
+    padding: 0.875rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+.auth-btn-social svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+}
+.btn-google {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+.btn-google:hover { background-color: rgba(255, 255, 255, 0.1); }
+.btn-facebook {
+    background-color: rgba(24, 119, 242, 0.1);
+    border: 1px solid rgba(24, 119, 242, 0.3);
+    color: #1877F2;
+}
+.btn-facebook:hover { background-color: rgba(24, 119, 242, 0.2); }

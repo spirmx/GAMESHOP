@@ -2,13 +2,12 @@ from django.db import models
 from django.conf import settings
 
 class Wallet(models.Model):
-    # เชื่อมกับ CustomUser แบบ One-to-One
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         related_name='wallet'
     )
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="ยอดเงินคงเหลือ")
+    balance = models.DecimalField(max_digits=100, decimal_places=2, default=0.00, verbose_name="ยอดเงินคงเหลือ")
 
     class Meta:
         verbose_name = "กระเป๋าเงิน"
@@ -23,8 +22,8 @@ class WalletTransaction(models.Model):
         ('WITHDRAW', 'ถอนเงิน/ชำระเงิน'),
     )
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')
-    transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES, verbose_name="ประเภทรายการ")
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="จำนวนเงิน")
+    transaction_type = models.CharField(max_length=100, choices=TRANSACTION_TYPES, verbose_name="ประเภทรายการ")
+    amount = models.DecimalField(max_digits=100, decimal_places=2, verbose_name="จำนวนเงิน")
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name="เวลาทำรายการ")
 
     class Meta:

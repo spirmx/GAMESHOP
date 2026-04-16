@@ -11,7 +11,6 @@ class WalletAdmin(admin.ModelAdmin):
     get_role.short_description = 'Role'
 
     def get_readonly_fields(self, request, obj=None):
-        # 🚨 ถ้าผู้ใช้คนนี้มีการทำรายการผ่าน PromptPay/TrueMoney ให้ Lock ช่องยอดเงิน (ห้ามแอดมินแก้ตรงๆ)
         if obj and WalletTransaction.objects.filter(wallet=obj, transaction_type='EXTERNAL').exists():
             return ['balance']
         return []

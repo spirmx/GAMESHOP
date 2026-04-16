@@ -1,26 +1,34 @@
 <div class="group relative bg-[#0A0F16] border border-white/5 rounded-3xl overflow-hidden hover:border-blue-500/50 transition-all duration-500 hover:-translate-y-2 shadow-2xl flex flex-col h-full">
-    <div class="relative aspect-square overflow-hidden bg-gradient-to-b from-white/5 to-transparent p-4">
+    
+    <a href="{% url 'product_detail' product.id %}" class="product-image-container block group-hover:bg-white/[0.01] transition-colors relative">
         {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="w-full h-full object-contain transform group-hover:scale-110 transition duration-700">
+            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700">
         {% endif %}
         
-        <div class="absolute top-4 left-4 flex flex-col gap-2">
+        <div class="absolute top-4 left-4">
             {% if product.stock > 0 %}
-                <span class="bg-green-500/10 text-green-500 text-[9px] font-black px-3 py-1 rounded-full border border-green-500/20 uppercase tracking-widest">In Stock</span>
+                <span class="bg-green-500/10 text-green-500 text-xs font-black px-4 py-2 rounded-full border border-green-500/20 uppercase tracking-wider backdrop-blur-md">
+                    In Stock: {{ product.stock }}
+                </span>
             {% else %}
-                <span class="bg-red-500/10 text-red-500 text-[9px] font-black px-3 py-1 rounded-full border border-red-500/20 uppercase tracking-widest">Out of Stock</span>
+                <span class="bg-red-500/10 text-red-500 text-xs font-black px-4 py-2 rounded-full border border-red-500/20 uppercase tracking-wider backdrop-blur-md">
+                    Out of Stock: 0
+                </span>
             {% endif %}
         </div>
-    </div>
+    </a>
 
     <div class="p-6 flex-grow flex flex-col">
-        <p class="text-blue-500 text-[10px] font-black uppercase tracking-widest mb-2">{{ product.category.name }}</p>
-        <h3 class="text-lg font-bold text-white mb-4 line-clamp-2 min-h-[3.5rem] group-hover:text-blue-400 transition">{{ product.title }}</h3>
+        <p class="text-blue-500 text-[25px] font-black uppercase tracking-widest mb-2">{{ product.category.game.name|default:product.category.name }}</p>
+        
+        <a href="{% url 'product_detail' product.id %}" class="block hover:text-blue-400 transition">
+            <h3 class="text-lg font-bold text-white mb-4 line-clamp-2 min-h-[1 rem]">ITEM : {{ product.title }}</h3>
+        </a>
         
         <div class="flex items-end justify-between gap-4 mt-auto">
             <div>
-                <p class="text-slate-500 text-[9px] font-black uppercase leading-none mb-1">Price</p>
-                <p class="text-2xl font-black text-white italic">฿{{ product.price }}</p>
+                <p class="text-slate-500 text-[13px] font-black uppercase leading-none mb-1">Price</p>
+                <p class="text-2xl font-black text-[#fbbf24] italic tracking-tighter drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]"> ฿ {{ product.price|floatformat:2 }} บาท</p>
             </div>
             
             <form action="{% url 'cart:add_to_cart' product.id %}" method="POST">
@@ -31,5 +39,4 @@
             </form>
         </div>
     </div>
-    <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500"></div>
 </div>

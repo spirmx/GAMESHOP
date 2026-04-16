@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 text-white">
+    <h1 class="text-3xl font-black italic">MY WALLET</h1>
+    <div class="bg-white/5 p-8 rounded-2xl mt-6 border border-white/10">
+        <p class="text-slate-400 uppercase text-[10px] tracking-widest">Balance</p>
+        <h2 class="text-5xl font-black">฿{{ user.wallet.balance|default:"0.00" }}</h2>
+        <a href="{% url 'wallets:top_up' %}" class="inline-block mt-8 bg-blue-600 px-10 py-3 rounded-xl font-black">TOP UP</a>
+    </div>
+</div>
+{% endblock %}

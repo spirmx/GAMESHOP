@@ -3,27 +3,54 @@
 <div class="max-w-[1200px] mx-auto py-10 px-4 space-y-12">
     <h1 class="text-5xl font-black text-white italic uppercase tracking-tighter">Fleet <span class="text-blue-500">Credits</span></h1>
 
-    <form method="POST" action="{% url 'wallet:process_topup' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+    <form method="POST" action="{% url 'wallets:process_topup' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {% csrf_token %}
         <div class="lg:col-span-8 space-y-10">
             <section class="space-y-6">
-                <h2 class="text-xl font-black text-white uppercase italic">2. Select Payment Method</h2>
+                <h2 class="text-xl font-black text-white uppercase italic border-l-4 border-blue-500 pl-4">Select Payment Method</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <label class="cursor-pointer">
+                    <label class="cursor-pointer group">
                         <input type="radio" name="method" value="promptpay" class="peer hidden" checked>
-                        <div class="admin-card border-2 border-transparent peer-checked:border-blue-500">
-                             <span class="font-bold text-white">PromptPay (Auto Verify)</span>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer">
-                        <input type="radio" name="method" value="direct" class="peer hidden">
-                        <div class="admin-card border-2 border-transparent peer-checked:border-yellow-500">
-                             <span class="font-bold text-white">Direct Transfer (Manual)</span>
+                        <div class="bg-[#0A0F16] border border-white/10 p-6 rounded-2xl transition-all peer-checked:border-blue-500 peer-checked:bg-blue-600/10 group-hover:bg-white/5">
+                             <div class="flex items-center justify-between">
+                                <span class="font-black text-white uppercase tracking-widest text-sm">PromptPay</span>
+                                <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded font-bold">Auto Verify</span>
+                             </div>
                         </div>
                     </label>
                 </div>
             </section>
+
+            <section class="space-y-6">
+                <h2 class="text-xl font-black text-white uppercase italic border-l-4 border-blue-500 pl-4">Select Credit Package</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {% for price in price_list %}
+                    <label class="cursor-pointer group">
+                        <input type="radio" name="amount" value="{{ price }}" class="peer hidden" required>
+                        <div class="bg-[#0A0F16] border border-white/10 p-8 rounded-2xl text-center transition-all peer-checked:border-blue-500 peer-checked:bg-blue-600/10 group-hover:bg-white/5">
+                            <p class="text-[10px] font-black text-slate-500 uppercase mb-2">Credits</p>
+                            <p class="text-3xl font-black text-white italic">฿{{ price }}</p>
+                        </div>
+                    </label>
+                    {% endfor %}
+                </div>
+            </section>
         </div>
-        </form>
+
+        <div class="lg:col-span-4">
+            <div class="bg-[#0A0F16] border border-white/10 p-8 rounded-3xl sticky top-32 shadow-2xl">
+                <h3 class="text-white font-black uppercase italic mb-6">Order Summary</h3>
+                <div class="space-y-4 border-b border-white/5 pb-6 mb-6 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-slate-500 font-bold uppercase">Account</span>
+                        <span class="text-white">@{{ user.username }}</span>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-blue-600/20 uppercase tracking-widest text-sm">
+                    Confirm Purchase
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}
