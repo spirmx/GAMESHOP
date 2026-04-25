@@ -1,29 +1,246 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-[600px] mx-auto py-16 px-4">
-    <div class="mb-10 text-center">
-        <h1 class="text-4xl font-black text-white italic uppercase tracking-tighter">Edit <span class="text-blue-500">Pilot Info</span></h1>
-        <p class="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-2">จัดการข้อมูลการติดต่อของนักบิน</p>
+<div class="mx-auto mb-20 max-w-[1180px] px-4 py-10 sm:px-6 sm:py-12">
+    <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <span class="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-blue-300">
+                <span class="h-2 w-2 rounded-full bg-blue-400"></span>
+                Profile Config
+            </span>
+            <h1 class="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl xl:text-5xl">
+                แก้ไขข้อมูลโปรไฟล์
+            </h1>
+        </div>
+        <a href="{% url 'users:profile' %}" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-[11px] font-black uppercase tracking-[0.16em] text-slate-200 transition-all hover:border-blue-500/30 hover:bg-blue-500/10 hover:text-white">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            กลับหน้าโปรไฟล์
+        </a>
     </div>
 
-    <form method="POST" class="admin-card p-10 space-y-8 bg-[#161B26]/80 backdrop-blur-2xl">
-        {% csrf_token %}
-        <div class="space-y-6">
-            <div class="space-y-2">
-                <label class="text-[10px] font-black text-slate-500 uppercase ml-1">Email Address</label>
-                <input type="email" name="email" value="{{ user.email }}" required class="w-full" placeholder="pilot@example.com">
+    <div class="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <aside class="space-y-6">
+            <div class="rounded-[2rem] border border-white/10 bg-[#07101A]/85 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+                <div class="mx-auto mb-5 flex h-36 w-36 items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 bg-[#030508]">
+                    <img
+                        id="avatar-preview"
+                        src="{% if profile_user.avatar_url %}{{ profile_user.avatar_url }}{% elif profile_user.profile_image %}{{ profile_user.profile_image.url }}{% else %}https://placehold.co/600x600/030508/3b82f6?text=AVATAR{% endif %}"
+                        alt="Profile preview"
+                        decoding="async"
+                        width="600"
+                        height="600"
+                        class="h-full w-full object-cover"
+                    >
+                </div>
+
+                <div class="text-center">
+                    <h2 class="text-xl font-black text-white">{{ profile_user.username }}</h2>
+                    <p class="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">PAPAYA GAME SHOP MEMBER</p>
+                </div>
+
+                <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                    <p class="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">สถานะ Verify</p>
+                    <p class="mt-2 text-base font-black {% if profile_user.verification_complete %}text-emerald-300{% else %}text-amber-300{% endif %}">
+                        {% if profile_user.verification_complete %}
+                            ยืนยันแล้ว
+                        {% else %}
+                            รอยืนยัน
+                        {% endif %}
+                    </p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="rounded-full border px-3 py-1 text-[11px] font-black {% if profile_user.email_verified %}border-emerald-500/20 bg-emerald-500/10 text-emerald-200{% else %}border-white/10 bg-white/[0.04] text-slate-300{% endif %}">
+                            อีเมล {% if profile_user.email_verified %}ผ่าน{% else %}รอ{% endif %}
+                        </span>
+                        <span class="rounded-full border px-3 py-1 text-[11px] font-black {% if profile_user.phone_verified %}border-emerald-500/20 bg-emerald-500/10 text-emerald-200{% else %}border-white/10 bg-white/[0.04] text-slate-300{% endif %}">
+                            เบอร์ {% if profile_user.phone_verified %}ผ่าน{% else %}รอ{% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                {% if missing_identity_fields %}
+                <div class="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 text-sm text-amber-100">
+                    กรุณากรอก {{ missing_identity_fields|join:", " }} ให้ครบ
+                </div>
+                {% elif verification_required %}
+                <div class="rounded-2xl border border-blue-500/20 bg-blue-500/10 p-4 text-sm text-blue-100">
+                    กรอก Captcha ด้านล่างเพื่อยืนยันอีเมลและเบอร์โทรศัพท์ของบัญชีนี้
+                </div>
+                {% endif %}
+            </div>
+        </aside>
+
+        <form method="POST" enctype="multipart/form-data" id="profile-edit-form" class="rounded-[2rem] border border-white/10 bg-[#07101A]/85 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-8">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="mb-6 rounded-2xl border border-red-500/25 bg-red-500/10 p-4 text-sm font-bold text-red-200">
+                {{ form.non_field_errors|striptags }}
+            </div>
+            {% endif %}
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">ชื่อจริง</label>
+                    <div class="field-shell">{{ form.first_name }}</div>
+                    {% if form.first_name.errors %}<p class="text-sm font-bold text-red-300">{{ form.first_name.errors|striptags }}</p>{% endif %}
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">นามสกุล</label>
+                    <div class="field-shell">{{ form.last_name }}</div>
+                    {% if form.last_name.errors %}<p class="text-sm font-bold text-red-300">{{ form.last_name.errors|striptags }}</p>{% endif %}
+                </div>
             </div>
 
-            <div class="space-y-2">
-                <label class="text-[10px] font-black text-slate-500 uppercase ml-1">Phone Number</label>
-                <input type="text" name="phone" value="{{ user.profile.phone }}" required class="w-full" placeholder="09XXXXXXXX">
+            <div class="mt-5 space-y-2">
+                <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">อีเมล</label>
+                <div class="field-shell">{{ form.email }}</div>
+                {% if form.email.errors %}<p class="text-sm font-bold text-red-300">{{ form.email.errors|striptags }}</p>{% endif %}
             </div>
-        </div>
 
-        <div class="pt-4 space-y-4">
-            <button type="submit" class="btn-neon w-full py-4 text-sm tracking-[0.2em]">Save Changes</button>
-            <a href="{% url 'profile' %}" class="block text-center text-[10px] text-slate-500 font-black uppercase hover:text-white transition">Cancel & Return</a>
-        </div>
-    </form>
+            <div class="mt-5 space-y-2">
+                <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">เบอร์โทรศัพท์</label>
+                <div class="field-shell">{{ form.phone_number }}</div>
+                {% if form.phone_number.errors %}<p class="text-sm font-bold text-red-300">{{ form.phone_number.errors|striptags }}</p>{% endif %}
+            </div>
+
+            <div class="mt-5 space-y-3 rounded-[1.75rem] border border-white/10 bg-[#060B12]/80 p-5">
+                <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">รูปโปรไฟล์</label>
+                <div class="hidden">{{ form.profile_image }}</div>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <button type="button" id="trigger-file-select" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-blue-500/30 bg-blue-500/15 px-5 py-3 text-[11px] font-black uppercase tracking-[0.16em] text-blue-100 transition-all hover:border-blue-400 hover:bg-blue-500/25 hover:text-white">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                        เลือกรูปใหม่
+                    </button>
+                    <p id="file-name-display" class="min-h-[1.25rem] text-sm text-slate-400"></p>
+                </div>
+                {% if form.profile_image.errors %}<p class="text-sm font-bold text-red-300">{{ form.profile_image.errors|striptags }}</p>{% endif %}
+            </div>
+
+            {% if verification_required %}
+            <div id="profile-captcha-block" class="mt-5 rounded-[1.75rem] border border-blue-500/20 bg-blue-500/10 p-5 {% if missing_identity_fields %}hidden{% endif %}">
+                <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-blue-200">Captcha ยืนยันข้อมูลติดต่อ</label>
+                <p class="mt-2 text-lg font-black text-white">{{ captcha_question }}</p>
+                <p class="mt-2 text-sm text-blue-100">กรอกข้อมูลที่จำเป็นให้ครบก่อน แล้วระบบจะแสดงส่วนยืนยันให้ใช้งานทันที</p>
+                <input
+                    type="text"
+                    id="profile-captcha-answer"
+                    name="captcha_answer"
+                    inputmode="numeric"
+                    placeholder="กรอกคำตอบ"
+                    class="mt-4 w-full rounded-2xl border border-blue-500/20 bg-[#060B12] px-4 py-3.5 text-base font-black text-white outline-none transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
+                >
+            </div>
+            {% endif %}
+
+            <div class="mt-6 flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row">
+                <button type="submit" id="profile-submit-button" class="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-white transition-all hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    บันทึกข้อมูลโปรไฟล์
+                </button>
+                <a href="{% url 'users:profile' %}" class="inline-flex flex-1 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-slate-200 transition-all hover:border-white/20 hover:bg-white/[0.07] hover:text-white">
+                    ยกเลิกและกลับ
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('profile-edit-form');
+    const fileInput = document.querySelector('input[name="profile_image"]');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    const triggerButton = document.getElementById('trigger-file-select');
+    const avatarPreview = document.getElementById('avatar-preview');
+    const captchaBlock = document.getElementById('profile-captcha-block');
+    const captchaAnswer = document.getElementById('profile-captcha-answer');
+    const submitButton = document.getElementById('profile-submit-button');
+    const requiredInputs = form ? [
+        form.querySelector('input[name="first_name"]'),
+        form.querySelector('input[name="last_name"]'),
+        form.querySelector('input[name="email"]'),
+        form.querySelector('input[name="phone_number"]')
+    ].filter(Boolean) : [];
+
+    const updateVerificationGate = function () {
+        if (!submitButton) return;
+        if (!captchaBlock) {
+            submitButton.disabled = false;
+            return;
+        }
+
+        const fieldsComplete = requiredInputs.every(function (input) {
+            return input.value.trim() !== '';
+        });
+
+        captchaBlock.classList.toggle('hidden', !fieldsComplete);
+        submitButton.disabled = !(fieldsComplete && captchaAnswer && captchaAnswer.value.trim() !== '');
+    };
+
+    if (triggerButton && fileInput) {
+        triggerButton.addEventListener('click', function () {
+            fileInput.click();
+        });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) {
+                fileNameDisplay.textContent = '';
+                return;
+            }
+            fileNameDisplay.textContent = 'ไฟล์ที่เลือก: ' + file.name;
+            if (file.type.startsWith('image/') && avatarPreview) {
+                const objectUrl = URL.createObjectURL(file);
+                avatarPreview.src = objectUrl;
+                avatarPreview.onload = function () {
+                    URL.revokeObjectURL(objectUrl);
+                };
+            }
+        });
+    }
+
+    requiredInputs.forEach(function (input) {
+        input.addEventListener('input', updateVerificationGate);
+        input.addEventListener('change', updateVerificationGate);
+    });
+
+    if (captchaAnswer) {
+        captchaAnswer.addEventListener('input', updateVerificationGate);
+    }
+
+    updateVerificationGate();
+});
+</script>
+
+<style>
+.field-shell :is(input, select, textarea) {
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.95rem 1rem;
+    color: #ffffff;
+    font-size: 0.98rem;
+    font-weight: 700;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.field-shell :is(input, select, textarea)::placeholder {
+    color: rgb(100 116 139);
+}
+
+.field-shell :is(input, select, textarea):focus {
+    border-color: rgba(59, 130, 246, 0.8);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
+    background: rgba(59, 130, 246, 0.05);
+}
+</style>
 {% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-[1500px] mx-auto py-10 px-4 mb-20 relative">
+    <div class="absolute top-0 left-0 w-[800px] h-[800px] bg-blue-600/5 blur-[180px] rounded-full pointer-events-none z-0"></div>
+
+    <div class="mb-10 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+        <div>
+            <a href="{% url 'users:admin_dashboard' %}" class="text-blue-400 font-black uppercase text-sm mb-4 inline-flex items-center gap-2 hover:text-white transition-all group">
+                <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                กลับไปแดชบอร์ดผู้ดูแล
+            </a>
+            <h1 class="max-w-4xl text-3xl sm:text-4xl xl:text-5xl font-black text-white italic tracking-tight leading-[1.05] text-balance break-words">
+                รายชื่อผู้ใช้ <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">ทั้งหมด</span>
+            </h1>
+            <p class="text-slate-400 font-bold tracking-[0.2em] text-[11px] mt-4 uppercase">
+                User Management / Search / Online Status
+            </p>
+        </div>
+    </div>
+
+    <div class="mb-20 relative z-10">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl sm:text-2xl font-black text-yellow-400 tracking-wide leading-tight text-balance">
+                ผู้ดูแลระบบทั้งหมด ({{ admin_users.count }})
+            </h2>
+            <span class="text-[11px] text-yellow-300/70 font-black uppercase tracking-[0.2em]">Admin Team</span>
+        </div>
+
+        <div class="bg-[#070A10]/80 backdrop-blur-3xl border border-yellow-500/20 rounded-[2.5rem] p-6 md:p-8 shadow-2xl overflow-hidden">
+            <div class="max-h-[620px] overflow-y-auto custom-scrollbar pr-2">
+                {% include "dashboard/user_table_partial.html" with users=admin_users is_admin_section=True %}
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl sm:text-2xl font-black text-blue-400 tracking-wide leading-tight text-balance">
+                สมาชิกทั้งหมด ({{ player_users.count }})
+            </h2>
+            <span class="text-[11px] text-blue-300/70 font-black uppercase tracking-[0.2em]">Customer Directory</span>
+        </div>
+
+        <div class="bg-[#05080F]/95 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-6 md:p-8 shadow-[0_40px_100px_rgba(0,0,0,0.55)] overflow-hidden">
+            <div class="max-h-[860px] overflow-y-auto custom-scrollbar pr-2">
+                {% include "dashboard/user_table_partial.html" with users=player_users is_admin_section=False %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, rgba(59,130,246,0.65), rgba(6,182,212,0.65));
+    border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(96, 165, 250, 0.9); }
+</style>
+{% endblock %}

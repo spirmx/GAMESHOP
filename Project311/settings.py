@@ -9,20 +9,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =========================================================
 SECRET_KEY = 'django-insecure-papaya-shop-master-key-2026'
 DEBUG = True
-
-# ✅ อนุญาตให้เข้าถึงจาก ngrok และ localhost
 ALLOWED_HOSTS = ['*'] 
 
-# 🚀 NGROK & CSRF FIX: เพิ่มเพื่อให้ล็อกอินผ่านลิงก์ภายนอกได้
-# ถ้า ngrok เปลี่ยนลิงก์ ให้เอาโดเมนใหม่มาอัปเดตตรงนี้ครับ
-CSRF_TRUSTED_ORIGINS = [
-    'https://6634-2001-44c8-4161-3987-ec46-3609-37a5-4296.ngrok-free.app',
-]
+CSRF_TRUSTED_ORIGINS = ['https://a0d9-2001-44c8-6102-878f-a0e5-8d99-f438-f06b.ngrok-free.app',]
 
-# ✅ ตั้งค่า Session ให้ทำงานผ่าน HTTP ธรรมดาได้ (เหมาะสำหรับการทดสอบผ่าน Tunnel)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = False # ช่วยให้บางเบราว์เซอร์จัดการ Cookie ได้ง่ายขึ้นขณะทดสอบ
+CSRF_COOKIE_HTTPONLY = False
 
 # =========================================================
 # 📦 INSTALLED APPS
@@ -35,8 +30,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-
-    # 🎮 PAPAYA GAME SHOP APPS
     'apps.users',      
     'apps.store',      
     'apps.orders',     
@@ -46,9 +39,13 @@ INSTALLED_APPS = [
 ]
 
 # =========================================================
-# 🧠 AUTHENTICATION & USER MODEL
+# 🧠 AUTHENTICATION
 # =========================================================
 AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # =========================================================
 # 🛠️ MIDDLEWARE
@@ -57,15 +54,14 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware', # 🚨 ตัวควบคุมการล็อกอิน
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.UpdateLastSeenMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ... (ส่วนที่เหลือคงเดิมตามที่คุณส่งมา) ...
 ROOT_URLCONF = 'Project311.urls'
-WSGI_APPLICATION = 'Project311.wsgi.application'
 
 TEMPLATES = [
     {
@@ -83,6 +79,9 @@ TEMPLATES = [
     },
 ]
 
+# =========================================================
+# 💾 DATABASE & STORAGE
+# =========================================================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -94,16 +93,14 @@ LANGUAGE_CODE = 'th-th'
 TIME_ZONE = 'Asia/Bangkok'
 USE_I18N = True
 USE_TZ = True
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = 'login'
-
+# =========================================================
+# ✉️ MESSAGES (Tailwind Colors)
+# =========================================================
 MESSAGE_TAGS = {
     messages.DEBUG: 'bg-slate-500',
     messages.INFO: 'bg-blue-500',
@@ -112,23 +109,9 @@ MESSAGE_TAGS = {
     messages.ERROR: 'bg-red-500',
 }
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/app.log',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    },
-}
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 

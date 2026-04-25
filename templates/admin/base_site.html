@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}PAPAYA GAME SHOP หลังบ้าน{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin_papaya.css' %}">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">PAPAYA GAME SHOP หลังบ้าน</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

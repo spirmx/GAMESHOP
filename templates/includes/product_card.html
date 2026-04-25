@@ -1,42 +1,119 @@
-<div class="group relative bg-[#0A0F16] border border-white/5 rounded-3xl overflow-hidden hover:border-blue-500/50 transition-all duration-500 hover:-translate-y-2 shadow-2xl flex flex-col h-full">
-    
-    <a href="{% url 'product_detail' product.id %}" class="product-image-container block group-hover:bg-white/[0.01] transition-colors relative">
+<div class="group relative bg-[#0A0F16] border border-white/5 rounded-[1.75rem] overflow-hidden transition-all duration-500 shadow-2xl flex flex-col h-full {% if product.is_available_for_sale %}hover:border-blue-500/40 hover:-translate-y-1.5{% else %}opacity-90{% endif %}">
+    {% if product.is_available_for_sale %}
+    <a href="{% url 'product_detail' product.id %}" class="product-image-container block relative aspect-[16/10] bg-[#060A12] overflow-hidden">
+    {% else %}
+    <div class="product-image-container block relative aspect-[16/10] bg-[#060A12] overflow-hidden cursor-not-allowed">
+    {% endif %}
+        <div class="absolute inset-0 bg-gradient-to-b from-white/[0.03] via-transparent to-black/20 {% if product.is_available_for_sale %}opacity-0 group-hover:opacity-100{% else %}opacity-100{% endif %} transition-opacity duration-500 z-[1]"></div>
+
         {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700">
+            <img src="{{ product.image.url }}" alt="{{ product.title }}" loading="lazy" decoding="async" width="800" height="500" class="w-full h-full object-cover {% if product.is_available_for_sale %}transform group-hover:scale-[1.04]{% endif %} transition-transform duration-700">
+        {% else %}
+            <div class="w-full h-full flex items-center justify-center text-sm text-white/20">ไม่มีรูปภาพ</div>
         {% endif %}
-        
-        <div class="absolute top-4 left-4">
-            {% if product.stock > 0 %}
-                <span class="bg-green-500/10 text-green-500 text-xs font-black px-4 py-2 rounded-full border border-green-500/20 uppercase tracking-wider backdrop-blur-md">
-                    In Stock: {{ product.stock }}
+
+        <div class="absolute top-3 left-3 z-10 flex flex-col gap-2">
+            {% if not product.game_is_available_for_sale or not product.is_active %}
+                <span class="bg-amber-500/10 text-amber-300 text-[10px] sm:text-[11px] font-black px-3 py-1.5 rounded-full border border-amber-500/20 uppercase tracking-[0.15em] backdrop-blur-md flex items-center gap-2 shadow-md">
+                    <span>!</span>
+                    {{ product.storefront_status_label }}
+                </span>
+            {% elif product.stock > 0 %}
+                <span class="bg-green-500/10 text-green-400 text-[10px] sm:text-[11px] font-black px-3 py-1.5 rounded-full border border-green-500/20 uppercase tracking-[0.15em] backdrop-blur-md flex items-center gap-2 shadow-md">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    มีสินค้าในคลัง: {{ product.stock }}
                 </span>
             {% else %}
-                <span class="bg-red-500/10 text-red-500 text-xs font-black px-4 py-2 rounded-full border border-red-500/20 uppercase tracking-wider backdrop-blur-md">
-                    Out of Stock: 0
+                <span class="bg-red-500/10 text-red-400 text-[10px] sm:text-[11px] font-black px-3 py-1.5 rounded-full border border-red-500/20 uppercase tracking-[0.15em] backdrop-blur-md flex items-center gap-2 shadow-md">
+                    <span>x</span>
+                    สินค้าหมด
                 </span>
             {% endif %}
         </div>
-    </a>
 
-    <div class="p-6 flex-grow flex flex-col">
-        <p class="text-blue-500 text-[25px] font-black uppercase tracking-widest mb-2">{{ product.category.game.name|default:product.category.name }}</p>
-        
-        <a href="{% url 'product_detail' product.id %}" class="block hover:text-blue-400 transition">
-            <h3 class="text-lg font-bold text-white mb-4 line-clamp-2 min-h-[1 rem]">ITEM : {{ product.title }}</h3>
-        </a>
-        
-        <div class="flex items-end justify-between gap-4 mt-auto">
-            <div>
-                <p class="text-slate-500 text-[13px] font-black uppercase leading-none mb-1">Price</p>
-                <p class="text-2xl font-black text-[#fbbf24] italic tracking-tighter drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]"> ฿ {{ product.price|floatformat:2 }} บาท</p>
+        <div class="absolute top-3 right-3 flex flex-col items-end gap-1.5 z-10">
+            {% if product.related_game and product.related_game.platform %}
+                <span class="bg-[#0A0F16]/95 text-white text-[9px] sm:text-[10px] font-black px-2.5 py-1.5 rounded-md border border-white/10 uppercase tracking-[0.14em] backdrop-blur-sm shadow-md">
+                    {{ product.related_game.platform.name }}
+                </span>
+            {% endif %}
+
+            {% if product.related_game and product.related_game.genre %}
+                <span class="bg-[#1A110B]/95 text-orange-300 text-[9px] sm:text-[10px] font-black px-2.5 py-1.5 rounded-md border border-orange-500/30 uppercase tracking-[0.14em] backdrop-blur-sm shadow-md">
+                    {{ product.related_game.genre.name }}
+                </span>
+            {% endif %}
+        </div>
+
+        {% if product.category %}
+        <div class="absolute bottom-0 left-0 w-full z-10">
+            <div class="bg-blue-500/90 backdrop-blur-md text-white text-[10px] font-black px-4 py-1.5 uppercase tracking-[0.18em] text-center shadow-[0_-5px_15px_rgba(59,130,246,0.2)]">
+                {{ product.category.name }}
             </div>
-            
-            <form action="{% url 'cart:add_to_cart' product.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="w-12 h-12 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-blue-600/20 active:scale-90 group-hover:rotate-6">
-                    <span class="text-xl font-bold">+</span>
-                </button>
-            </form>
+        </div>
+        {% endif %}
+    {% if product.is_available_for_sale %}
+    </a>
+    {% else %}
+    </div>
+    {% endif %}
+
+    <div class="p-5 sm:p-6 flex-grow flex flex-col relative z-20">
+        <p class="text-blue-500 text-[11px] sm:text-[12px] font-black uppercase tracking-[0.18em] mb-2 truncate">
+            {{ product.related_game.name|default:"ไม่มีข้อมูลเกม" }}
+        </p>
+
+        {% if product.is_available_for_sale %}
+        <a href="{% url 'product_detail' product.id %}" class="block hover:text-blue-400 transition-colors">
+            <h3 class="text-[16px] sm:text-[18px] font-black text-white leading-snug mb-4 line-clamp-2 min-h-[3rem] sm:min-h-[3.25rem] uppercase">
+                {{ product.title }}
+            </h3>
+        </a>
+        {% else %}
+        <div class="block">
+            <h3 class="text-[16px] sm:text-[18px] font-black text-white/85 leading-snug mb-4 line-clamp-2 min-h-[3rem] sm:min-h-[3.25rem] uppercase">
+                {{ product.title }}
+            </h3>
+        </div>
+        {% endif %}
+
+        <div class="flex items-center gap-2 text-[10px] sm:text-[11px] text-slate-500 font-bold uppercase tracking-[0.14em] mb-5">
+            {% if product.category %}
+                <span class="truncate">{{ product.category.name }}</span>
+                <span class="text-slate-700">|</span>
+            {% endif %}
+            {% if product.is_available_for_sale %}
+                <span class="text-green-400">พร้อมขาย</span>
+            {% elif not product.game_is_available_for_sale or not product.is_active %}
+                <span class="text-amber-300">{{ product.storefront_status_label }}</span>
+            {% else %}
+                <span class="text-red-400">สินค้าหมด</span>
+            {% endif %}
+        </div>
+
+        <div class="flex items-end justify-between gap-4 mt-auto pt-4 border-t border-white/5">
+            <div>
+                <p class="text-slate-500 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.14em] leading-none mb-1.5">ราคา</p>
+                <p class="text-[20px] sm:text-[22px] font-black text-[#fbbf24] italic tracking-tight drop-shadow-[0_0_8px_rgba(251,191,36,0.25)] leading-none">
+                    ฿ {{ product.price|floatformat:2 }}
+                </p>
+                <span class="text-[10px] sm:text-[11px] text-blue-500 font-black uppercase tracking-[0.14em]">บาท</span>
+            </div>
+
+            {% if product.is_available_for_sale %}
+                <a href="{% url 'product_detail' product.id %}" class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 transition-all hover:border-cyan-400 hover:bg-cyan-500/20 hover:text-white sm:h-12 sm:w-12" aria-label="View {{ product.title }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                </a>
+            {% else %}
+            <div class="w-11 h-11 sm:w-12 sm:h-12 bg-slate-800/80 border border-white/5 text-slate-500 rounded-2xl flex items-center justify-center cursor-not-allowed" title="{{ product.storefront_status_label }}">
+                <span class="text-[10px] font-black uppercase tracking-[0.14em]">
+                    {% if not product.game_is_available_for_sale or not product.is_active %}ปิด{% else %}หมด{% endif %}
+                </span>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

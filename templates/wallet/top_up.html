@@ -1,54 +1,158 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-[1200px] mx-auto py-10 px-4 space-y-12">
-    <h1 class="text-5xl font-black text-white italic uppercase tracking-tighter">Fleet <span class="text-blue-500">Credits</span></h1>
+<div
+    class="max-w-[1400px] mx-auto py-12 px-4 space-y-12 relative mb-20"
+    x-data="{
+        amount: null,
+        method: 'promptpay',
+        gateways: [
+            { id: 'promptpay', label: 'พร้อมเพย์ QR', tag: 'แนะนำ' },
+            { id: 'truemoney', label: 'ทรูมันนี่', tag: 'ทดลอง' },
+            { id: 'card', label: 'บัตรเครดิต', tag: 'ทดลอง' },
+            { id: 'crypto', label: 'คริปโตวอลเล็ต', tag: 'ทดลอง' }
+        ],
+        get methodLabel() {
+            const selected = this.gateways.find(g => g.id === this.method);
+            return selected ? selected.label : '-';
+        }
+    }"
+>
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none z-0"></div>
 
-    <form method="POST" action="{% url 'wallets:process_topup' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+    <div class="mb-10 relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/5 pb-6">
+        <div>
+            <p class="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-2">ระบบเติมเครดิต</p>
+            <h1 class="text-4xl sm:text-5xl font-black text-white italic uppercase tracking-tighter drop-shadow-lg">
+                PAPAYA<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 px-4 to-cyan-300">CREDITS</span>
+            </h1>
+        </div>
+
+        <div class="flex items-center gap-3 bg-black/40 px-4 py-2 rounded-xl border border-white/5 backdrop-blur-md">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]"></span>
+            <p class="text-green-400 font-bold uppercase text-[9px] tracking-widest">พร้อมทำรายการ</p>
+        </div>
+    </div>
+
+    <form method="POST" action="{% url 'wallets:process_topup' %}" class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
         {% csrf_token %}
+
         <div class="lg:col-span-8 space-y-10">
             <section class="space-y-6">
-                <h2 class="text-xl font-black text-white uppercase italic border-l-4 border-blue-500 pl-4">Select Payment Method</h2>
+                <h2 class="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-8 bg-blue-500 rounded-full inline-block shadow-[0_0_10px_#3b82f6]"></span>
+                    เลือกช่องทางชำระเงิน
+                </h2>
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <label class="cursor-pointer group">
-                        <input type="radio" name="method" value="promptpay" class="peer hidden" checked>
-                        <div class="bg-[#0A0F16] border border-white/10 p-6 rounded-2xl transition-all peer-checked:border-blue-500 peer-checked:bg-blue-600/10 group-hover:bg-white/5">
-                             <div class="flex items-center justify-between">
-                                <span class="font-black text-white uppercase tracking-widest text-sm">PromptPay</span>
-                                <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded font-bold">Auto Verify</span>
-                             </div>
-                        </div>
-                    </label>
+                    <template x-for="g in gateways" :key="g.id">
+                        <label class="cursor-pointer group relative">
+                            <input type="radio" name="method" :value="g.id" x-model="method" class="peer hidden">
+
+                            <div
+                                class="bg-[#070A10] border border-white/10 p-6 rounded-2xl transition-all"
+                                :class="method === g.id
+                                    ? 'border-blue-500 bg-blue-600/10 shadow-lg shadow-blue-500/20'
+                                    : 'hover:border-blue-500/50'"
+                            >
+                                <div class="flex items-center justify-between gap-4">
+                                    <span class="font-black text-white uppercase tracking-widest text-sm" x-text="g.label"></span>
+                                    <span
+                                        class="text-[8px] px-2 py-1 rounded font-black uppercase tracking-wider shrink-0"
+                                        :class="method === g.id ? 'bg-green-500/20 text-green-400' : 'bg-slate-500/20 text-slate-400'"
+                                        x-text="g.tag"
+                                    ></span>
+                                </div>
+                            </div>
+                        </label>
+                    </template>
                 </div>
             </section>
 
             <section class="space-y-6">
-                <h2 class="text-xl font-black text-white uppercase italic border-l-4 border-blue-500 pl-4">Select Credit Package</h2>
+                <h2 class="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-8 bg-blue-500 rounded-full inline-block shadow-[0_0_10px_#3b82f6]"></span>
+                    เลือกแพ็กเกจเครดิต
+                </h2>
+
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {% for price in price_list %}
-                    <label class="cursor-pointer group">
-                        <input type="radio" name="amount" value="{{ price }}" class="peer hidden" required>
-                        <div class="bg-[#0A0F16] border border-white/10 p-8 rounded-2xl text-center transition-all peer-checked:border-blue-500 peer-checked:bg-blue-600/10 group-hover:bg-white/5">
-                            <p class="text-[10px] font-black text-slate-500 uppercase mb-2">Credits</p>
-                            <p class="text-3xl font-black text-white italic">฿{{ price }}</p>
+                    <label class="cursor-pointer group relative">
+                        <input type="radio" name="amount" value="{{ price }}" x-model="amount" class="peer hidden" required>
+
+                        <div
+                            class="bg-[#070A10] border border-white/10 p-6 sm:p-8 rounded-2xl text-center transition-all"
+                            :class="amount == '{{ price }}'
+                                ? 'border-blue-500 bg-blue-600/10 shadow-[0_0_30px_rgba(37,99,235,0.3)]'
+                                : 'hover:border-blue-500/50'"
+                        >
+                            <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-2">จำนวนที่ต้องการเติม</p>
+                            <p class="text-2xl sm:text-3xl font-black text-white italic drop-shadow-md">฿{{ price }}</p>
                         </div>
                     </label>
                     {% endfor %}
                 </div>
             </section>
+
+            <section class="bg-[#070A10]/60 border border-white/5 rounded-[2rem] p-6 sm:p-8 backdrop-blur-xl">
+                <h3 class="text-sm font-black text-white uppercase italic tracking-widest mb-5 border-b border-white/5 pb-4">
+                    ข้อมูลเพิ่มเติม
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="bg-black/30 border border-white/5 rounded-2xl p-5">
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">เครดิตจะเข้า</p>
+                        <p class="text-white font-black text-sm">อัตโนมัติหลังยืนยัน</p>
+                    </div>
+
+                    <div class="bg-black/30 border border-white/5 rounded-2xl p-5">
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">ช่องทางเด่น</p>
+                        <p class="text-blue-400 font-black text-sm">พร้อมเพย์ / ทรูมันนี่</p>
+                    </div>
+
+                    <div class="bg-black/30 border border-white/5 rounded-2xl p-5">
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">สถานะระบบ</p>
+                        <p class="text-green-400 font-black text-sm">พร้อมใช้งาน</p>
+                    </div>
+                </div>
+            </section>
         </div>
 
         <div class="lg:col-span-4">
-            <div class="bg-[#0A0F16] border border-white/10 p-8 rounded-3xl sticky top-32 shadow-2xl">
-                <h3 class="text-white font-black uppercase italic mb-6">Order Summary</h3>
-                <div class="space-y-4 border-b border-white/5 pb-6 mb-6 text-sm">
-                    <div class="flex justify-between">
-                        <span class="text-slate-500 font-bold uppercase">Account</span>
-                        <span class="text-white">@{{ user.username }}</span>
+            <div class="bg-[#070A10]/90 backdrop-blur-2xl border border-white/5 p-8 rounded-[2rem] sticky top-32 shadow-2xl">
+                <h3 class="text-sm font-black text-white uppercase italic tracking-widest mb-6 flex items-center gap-2 border-b border-white/5 pb-4">
+                    สรุปรายการเติมเครดิต
+                </h3>
+
+                <div class="space-y-4 mb-8 text-sm">
+                    <div class="flex justify-between items-center bg-black/40 p-4 rounded-xl border border-white/5 gap-4">
+                        <span class="text-slate-500 font-black text-[9px] uppercase tracking-widest">บัญชีผู้ใช้</span>
+                        <span class="text-blue-400 font-black italic text-xs break-all">@{{ user.username }}</span>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-black/40 p-4 rounded-xl border border-white/5 gap-4">
+                        <span class="text-slate-500 font-black text-[9px] uppercase tracking-widest">ช่องทางชำระเงิน</span>
+                        <span class="text-white font-black italic text-[10px] uppercase text-right" x-text="methodLabel"></span>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-black/40 p-4 rounded-xl border border-blue-500/20 gap-4">
+                        <span class="text-slate-500 font-black text-[9px] uppercase tracking-widest">ยอดที่ต้องชำระ</span>
+                        <span class="text-white font-black italic text-2xl drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] text-right">
+                            ฿<span x-text="amount ? Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'"></span>
+                        </span>
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-blue-600/20 uppercase tracking-widest text-sm">
-                    Confirm Purchase
+
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] uppercase tracking-[0.2em] text-[10px] hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                    :disabled="!amount"
+                >
+                    ยืนยันการเริ่มรายการ
                 </button>
+
+                <p class="text-center text-slate-500 text-[9px] font-bold uppercase tracking-widest mt-4">
+                    กรุณาเลือกช่องทางและจำนวนเครดิตก่อนดำเนินการ
+                </p>
             </div>
         </div>
     </form>

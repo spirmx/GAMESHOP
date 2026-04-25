@@ -1,0 +1,227 @@
+<div class="mb-8 px-2">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="relative max-w-xl w-full group">
+            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-blue-500/50 group-focus-within:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+
+            <input
+                type="text"
+                id="searchInput_{{ is_admin_section }}"
+                oninput="filterTable('{{ is_admin_section }}')"
+                placeholder="ค้นหาจากชื่อผู้ใช้ อีเมล รหัสสมาชิก หรือสถานะ..."
+                class="w-full bg-[#030508]/50 backdrop-blur-md border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-xs sm:text-sm font-black text-white tracking-[0.08em] focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all placeholder:text-slate-500 shadow-inner"
+            >
+        </div>
+
+        <div class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] text-slate-400">ผลลัพธ์ที่แสดง</span>
+            <span id="resultCount_{{ is_admin_section }}" class="text-sm sm:text-base font-black text-white" data-total="{{ users|length }}">
+                {{ users|length }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="overflow-hidden rounded-2xl border border-white/5 bg-[#070A10]/40 backdrop-blur-sm">
+    <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full min-w-[980px] text-left border-collapse" id="userTable_{{ is_admin_section }}">
+            <thead class="hidden md:table-header-group">
+                <tr class="border-b border-white/10 bg-black/30">
+                    <th class="py-5 w-32 text-center text-slate-400 text-[10px] uppercase font-black tracking-[0.26em]">รูปโปรไฟล์</th>
+                    <th class="py-5 pl-6 text-slate-400 text-[10px] uppercase font-black tracking-[0.26em]">ข้อมูลผู้ใช้</th>
+                    <th class="py-5 text-center text-slate-400 text-[10px] uppercase font-black tracking-[0.26em]">สถานะ</th>
+                    <th class="py-5 text-center text-slate-400 text-[10px] uppercase font-black tracking-[0.26em]">ยืนยันตัวตน</th>
+                    <th class="py-5 text-center text-slate-400 text-[10px] uppercase font-black tracking-[0.26em]">สิทธิ์ใช้งาน</th>
+                    <th class="py-5 text-center text-slate-400 text-[10px] uppercase font-black tracking-[0.26em]">ใช้งานล่าสุด</th>
+                    <th class="py-5 text-right pr-8 text-slate-400 text-[10px] uppercase font-black tracking-[0.26em]">จัดการ</th>
+                </tr>
+            </thead>
+
+            <tbody class="divide-y divide-white/5">
+                {% for u in users %}
+                <tr class="group block md:table-row border-b border-white/5 md:border-0 hover:bg-blue-500/[0.03] transition-all duration-300 user-row">
+                    <td class="block md:table-cell py-5 md:py-6 text-center align-middle">
+                        <div class="flex md:block items-center gap-4 px-4 md:px-0">
+                            <div class="relative w-16 h-16 sm:w-20 sm:h-20 mx-0 md:mx-auto group-hover:scale-105 transition-transform duration-500 shrink-0">
+                                <div class="absolute inset-0 bg-blue-500/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <img
+                                    src="{{ u.avatar_url }}"
+                                    alt="Avatar of {{ u.username }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="80"
+                                    height="80"
+                                    class="relative z-10 w-full h-full rounded-2xl object-cover border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] group-hover:border-blue-500/50 transition-all"
+                                >
+
+                                <div class="absolute -bottom-1 -right-1 flex h-5 w-5 z-20">
+                                    {% if u.is_online %}
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22c55e] opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-5 w-5 bg-[#22c55e] border-[3px] border-[#070A10]"></span>
+                                    {% else %}
+                                    <span class="relative inline-flex rounded-full h-5 w-5 bg-slate-500 border-[3px] border-[#070A10]"></span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="md:hidden text-left min-w-0">
+                                <p class="font-black text-white text-lg tracking-tight uppercase truncate">{{ u.username }}</p>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                                    รหัสสมาชิก #{{ u.id|stringformat:"04d" }}
+                                </p>
+                                <p class="text-[11px] text-blue-300 font-black mt-2 break-all">
+                                    {{ u.email|default:"ยังไม่ได้ระบุอีเมล" }}
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="hidden md:table-cell py-6 pl-6 align-middle">
+                        <p class="font-black text-white text-2xl tracking-tight group-hover:text-blue-400 transition-colors uppercase mb-1 truncate max-w-[250px]">
+                            {{ u.username }}
+                        </p>
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                                รหัสสมาชิก <span class="text-white">#{{ u.id|stringformat:"04d" }}</span>
+                            </span>
+                            <span class="text-[10px] text-blue-300 font-black tracking-wide bg-blue-500/10 w-fit px-2.5 py-1 rounded border border-blue-500/20">
+                                {{ u.email|default:"ยังไม่ได้ระบุอีเมล" }}
+                            </span>
+                        </div>
+                    </td>
+
+                    <td class="block md:table-cell px-4 md:px-0 py-2 md:py-6 text-left md:text-center align-middle">
+                        <div class="md:hidden text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-2">สถานะ</div>
+                        {% if u.is_online %}
+                        <span class="inline-flex items-center gap-2 bg-green-500/10 text-green-300 border border-green-500/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                            ออนไลน์
+                        </span>
+                        {% elif u.last_seen %}
+                        <span class="inline-flex items-center gap-2 bg-slate-500/10 text-slate-300 border border-slate-500/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                            ออฟไลน์
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 bg-slate-500/10 text-slate-400 border border-slate-500/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                            ยังไม่เคยเข้าใช้
+                        </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="block md:table-cell px-4 md:px-0 py-2 md:py-6 text-left md:text-center align-middle">
+                        <div class="md:hidden text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-2">ยืนยันตัวตน</div>
+                        {% if u.verification_complete %}
+                        <span class="inline-flex items-center gap-2 bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Verified Identity
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-2 bg-red-500/10 text-red-300 border border-red-500/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            <span class="w-2 h-2 rounded-full bg-red-400"></span>
+                            Not Verify
+                        </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="block md:table-cell px-4 md:px-0 py-2 md:py-6 text-left md:text-center align-middle">
+                        <div class="md:hidden text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-2">สิทธิ์ใช้งาน</div>
+                        {% if u.is_staff %}
+                        <span class="inline-flex bg-yellow-500/10 text-yellow-300 border border-yellow-500/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            ผู้ดูแลระบบ
+                        </span>
+                        {% else %}
+                        <span class="inline-flex bg-blue-600/10 text-blue-300 border border-blue-500/20 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
+                            สมาชิกทั่วไป
+                        </span>
+                        {% endif %}
+                    </td>
+
+                    <td class="block md:table-cell px-4 md:px-0 py-2 md:py-6 text-left md:text-center align-middle">
+                        <div class="md:hidden text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-2">ใช้งานล่าสุด</div>
+                        <div class="bg-black/30 rounded-xl py-3 px-4 border border-white/5 inline-block min-w-[160px]">
+                            <p class="text-slate-200 font-black text-sm">
+                                {{ u.last_seen|date:"d M Y"|default:"ยังไม่เคยเข้าใช้งาน" }}
+                            </p>
+                            <p class="text-[10px] text-blue-400 font-bold mt-1">
+                                {{ u.last_seen|time:"H:i:s"|default:"--:--:--" }}
+                            </p>
+                        </div>
+                    </td>
+
+                    <td class="block md:table-cell px-4 md:px-0 py-4 md:py-6 text-left md:text-right pr-4 md:pr-8 align-middle">
+                        <div class="md:hidden text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-2">จัดการ</div>
+                        <a
+                            href="/admin/users/customuser/{{ u.id }}/change/"
+                            class="inline-flex items-center justify-center gap-2 min-w-[128px] md:min-w-0 h-11 px-4 md:px-0 md:w-11 bg-white/5 hover:bg-blue-600 text-slate-300 hover:text-white rounded-xl transition-all border border-white/10 hover:border-blue-500"
+                            title="แก้ไขข้อมูลผู้ใช้"
+                            aria-label="แก้ไขข้อมูลผู้ใช้ {{ u.username }}"
+                        >
+                            <span class="text-base">⚙</span>
+                            <span class="md:hidden text-[11px] font-black uppercase tracking-widest">แก้ไขข้อมูล</span>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr id="emptyRow_{{ is_admin_section }}">
+                    <td colspan="7" class="py-24 text-center text-slate-400">
+                        ยังไม่มีข้อมูลผู้ใช้ในระบบ
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <tr id="noSearchResult_{{ is_admin_section }}" class="hidden">
+                    <td colspan="7" class="py-16 text-center text-slate-500">
+                        ไม่พบข้อมูลที่ตรงกับคำค้นหา
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function filterTable(sectionId) {
+    const input = document.getElementById('searchInput_' + sectionId);
+    const table = document.getElementById('userTable_' + sectionId);
+    const countEl = document.getElementById('resultCount_' + sectionId);
+    const noResultRow = document.getElementById('noSearchResult_' + sectionId);
+    const rows = table.querySelectorAll('tbody tr.user-row');
+
+    const filter = input.value.trim().toUpperCase();
+    let visibleCount = 0;
+
+    rows.forEach(function (row) {
+        const text = row.textContent || row.innerText;
+        const matched = text.toUpperCase().includes(filter);
+
+        if (matched) {
+            row.classList.remove('hidden');
+            visibleCount += 1;
+        } else {
+            row.classList.add('hidden');
+        }
+    });
+
+    if (countEl) {
+        countEl.textContent = visibleCount;
+    }
+
+    if (noResultRow) {
+        if (visibleCount === 0 && rows.length > 0) {
+            noResultRow.classList.remove('hidden');
+        } else {
+            noResultRow.classList.add('hidden');
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    filterTable('{{ is_admin_section }}');
+});
+</script>

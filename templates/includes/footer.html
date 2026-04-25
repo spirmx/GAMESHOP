@@ -1,13 +1,301 @@
-<footer class="mt-20 border-t border-white/5 bg-[#05070A] py-12">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-6 md:mb-0">
-            <span class="text-xl font-black italic text-white">PAPAYA<span class="text-blue-500">SHOP</span></span>
-            <p class="text-slate-500 text-xs mt-2">© 2026 PAPAYA GAME SHOP. All rights reserved.</p>
+<div x-data="{ modal: null }">
+    <footer class="mt-20 border-t border-white/5 bg-[#05070A] py-12">
+        <div class="mx-auto flex max-w-7xl flex-col gap-8 px-4">
+            <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                <div class="text-center md:text-left">
+                    <span class="text-xl font-black italic text-white">
+                        PAPAYAGAME<span class="text-blue-500">SHOP</span>
+                    </span>
+                    <p class="mt-2 text-xs text-slate-400">
+                        © {% now "Y" %} PAPAYA GAME SHOP. งานออกแบบและพัฒนาระบบฉบับเดโม่ สงวนลิขสิทธิ์ตามผู้จัดทำ
+                    </p>
+                    <p class="mt-2 text-[11px] text-slate-500">
+                        โครงงานนักศึกษา มหาวิทยาลัยศรีปทุม เขตบางเขน
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-4 text-xs font-black tracking-[0.18em] text-slate-400 sm:gap-6">
+                    <button type="button" @click="modal = 'contact'" class="transition hover:text-white">
+                        ติดต่อเรา
+                    </button>
+                    <button type="button" @click="modal = 'terms'" class="transition hover:text-white">
+                        ข้อกำหนดการใช้งาน
+                    </button>
+                    <button type="button" @click="modal = 'privacy'" class="transition hover:text-white">
+                        นโยบายความเป็นส่วนตัว
+                    </button>
+                    <button type="button" @click="modal = 'credits'" class="transition hover:text-cyan-300">
+                        ผู้จัดทำ
+                    </button>
+                </div>
+            </div>
+
+            <!-- CREDITS SECTION START: safe to remove this block later if not needed -->
+            <div class="rounded-[2rem] border border-white/8 bg-white/[0.03] px-5 py-5 sm:px-6">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <p class="text-[11px] font-black uppercase tracking-[0.28em] text-cyan-300">Project Credits</p>
+                        <h3 class="mt-2 text-lg font-black tracking-tight text-white sm:text-xl">
+                            ทีมผู้พัฒนาและทดสอบระบบ
+                        </h3>
+                        <p class="mt-2 max-w-3xl text-sm leading-7 text-slate-400">
+                            ส่วนนี้แยกออกจากเมนู footer หลักโดยเฉพาะ เพื่อให้แก้ไขรายชื่อผู้จัดทำ ลิขสิทธิ์ และข้อมูลโครงงานได้ง่าย
+                            โดยไม่กระทบเนื้อหาส่วนอื่นของเว็บไซต์
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        @click="modal = 'credits'"
+                        class="inline-flex items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-black text-cyan-200 transition-all hover:bg-cyan-400/15"
+                    >
+                        ดูรายชื่อผู้จัดทำ
+                    </button>
+                </div>
+            </div>
+            <!-- CREDITS SECTION END -->
         </div>
-        <div class="flex space-x-8 text-xs font-black text-slate-400 uppercase tracking-widest">
-            <a href="#" class="hover:text-white transition">ติดต่อเรา</a>
-            <a href="#" class="hover:text-white transition">เงื่อนไขการใช้งาน</a>
-            <a href="#" class="hover:text-white transition">นโยบายความเป็นส่วนตัว</a>
+    </footer>
+
+    <div
+        x-cloak
+        x-show="modal"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        @click.self="modal = null"
+        @keydown.escape.window="modal = null"
+        class="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 px-4 py-6 backdrop-blur-md"
+    >
+        <div
+            x-show="modal"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="translate-y-6 scale-95 opacity-0"
+            x-transition:enter-end="translate-y-0 scale-100 opacity-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="translate-y-0 scale-100 opacity-100"
+            x-transition:leave-end="translate-y-4 scale-95 opacity-0"
+            class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] border border-white/10 bg-[#071019]/95 shadow-[0_25px_80px_rgba(0,0,0,0.55)]"
+        >
+            <div class="pointer-events-none absolute inset-0 rounded-[2rem] bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:36px_36px] opacity-20"></div>
+            <div class="pointer-events-none absolute -top-16 left-10 h-56 w-56 rounded-full bg-blue-500/15 blur-[90px]"></div>
+            <div class="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-cyan-500/10 blur-[100px]"></div>
+
+            <button
+                type="button"
+                @click="modal = null"
+                class="absolute right-5 top-5 z-20 h-11 w-11 rounded-2xl border border-white/10 bg-white/[0.04] text-slate-400 transition hover:bg-white/[0.08] hover:text-white"
+            >
+                &times;
+            </button>
+
+            <div class="relative z-10 p-6 sm:p-8 lg:p-10">
+                <template x-if="modal === 'contact'">
+                    <div class="space-y-8">
+                        <div>
+                            <span class="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">
+                                Support Center
+                            </span>
+                            <h2 class="mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                                ติดต่อเรา
+                            </h2>
+                            <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+                                PAPAYA GAME SHOP เป็นร้านตัวอย่างสำหรับจำหน่ายโค้ดเกม บัตรเติมเงิน เพชร เครดิต และไอเท็มดิจิทัล
+                                เหมาะกับลูกค้าที่ต้องการระบบสั่งซื้อที่ดูง่าย รวดเร็ว และมีขั้นตอนใช้งานไม่ซับซ้อน
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Line Official</p>
+                                <p class="mt-3 text-lg font-black text-white">@papayashop</p>
+                                <p class="mt-2 text-sm text-slate-400">
+                                    ช่องทางหลักสำหรับสอบถามสินค้า โปรโมชั่น และแจ้งปัญหาหลังการสั่งซื้อ
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">Discord</p>
+                                <p class="mt-3 text-lg font-black text-white">PapayaGameShop#7788</p>
+                                <p class="mt-2 text-sm text-slate-400">
+                                    ใช้สำหรับพูดคุยกับทีมงาน ติดตามประกาศ และรับข้อมูลสินค้าตัวอย่างของร้าน
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">เวลาทำการ</p>
+                                <p class="mt-3 text-lg font-black text-white">ทุกวัน 09:00 - 23:30 น.</p>
+                                <p class="mt-2 text-sm text-slate-400">
+                                    สินค้าบางรายการเป็นระบบส่งอัตโนมัติ จึงยังใช้งานได้แม้นอกเวลาที่ทีมงานตอบแชต
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-[11px] font-black uppercase tracking-[0.16em] text-slate-500">ประเภทสินค้า</p>
+                                <p class="mt-3 text-lg font-black text-white">โค้ดเกม / เครดิต / เพชร / ไอเท็ม</p>
+                                <p class="mt-2 text-sm text-slate-400">
+                                    รองรับทั้งสินค้าแบบรับโค้ดทันที และสินค้าแบบบริการดิจิทัลในรูปแบบเดโม่
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-if="modal === 'terms'">
+                    <div class="space-y-8">
+                        <div>
+                            <span class="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-blue-300">
+                                Terms of Service
+                            </span>
+                            <h2 class="mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                                ข้อกำหนดการใช้งาน
+                            </h2>
+                            <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+                                การใช้งานเว็บไซต์ตัวอย่างนี้ถือว่าผู้ใช้งานยอมรับเงื่อนไขการแสดงผลข้อมูล การสั่งซื้อสินค้าเดโม่
+                                และขอบเขตการให้บริการตามที่ระบบกำหนดไว้
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">ตรวจสอบข้อมูลก่อนยืนยันคำสั่งซื้อ</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    กรุณาตรวจสอบชื่อเกม ชื่อสินค้า ราคา และรายละเอียดที่เกี่ยวข้องก่อนกดยืนยันทุกครั้ง
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">สินค้าดิจิทัลเป็นสินค้าตัวอย่าง</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    เว็บไซต์นี้เป็นระบบเดโม่เพื่อแสดงรูปแบบร้านค้าออนไลน์ การแสดงผลสินค้าและสต็อกบางส่วนจึงเป็นข้อมูลจำลอง
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">เวลาจัดส่งขึ้นอยู่กับประเภทสินค้า</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    สินค้าบางรายการรับได้ทันที ส่วนบางรายการอาจต้องใช้เวลาประมวลผลตามรูปแบบที่ร้านจำลองไว้
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">สิทธิ์ในการปรับเปลี่ยนข้อมูล</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    ร้านสามารถปรับราคา รายละเอียดสินค้า โปรโมชั่น หรือสถานะการขายได้โดยไม่ต้องแจ้งล่วงหน้า
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-if="modal === 'privacy'">
+                    <div class="space-y-8">
+                        <div>
+                            <span class="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-fuchsia-300">
+                                Privacy Policy
+                            </span>
+                            <h2 class="mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                                นโยบายความเป็นส่วนตัว
+                            </h2>
+                            <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+                                PAPAYA GAME SHOP ให้ความสำคัญกับข้อมูลของผู้ใช้งาน ข้อมูลที่จำเป็นจะถูกใช้เพื่อรองรับการเข้าสู่ระบบ
+                                การจัดการคำสั่งซื้อ และการแสดงผลประสบการณ์ใช้งานบนเว็บไซต์เท่านั้น
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">ข้อมูลที่อาจถูกจัดเก็บ</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    เช่น ชื่อผู้ใช้ อีเมล ประวัติคำสั่งซื้อ ประวัติการใช้งานล่าสุด และข้อมูลพื้นฐานที่จำเป็นต่อการแสดงผลระบบ
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">วัตถุประสงค์ของการใช้ข้อมูล</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    ใช้เพื่อยืนยันตัวตน แสดงสถานะคำสั่งซื้อ ปรับปรุงประสบการณ์ใช้งาน และดูแลความต่อเนื่องของระบบเดโม่
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">การเปิดเผยข้อมูล</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    ร้านจะไม่ขายหรือเผยแพร่ข้อมูลส่วนตัวให้บุคคลภายนอก ยกเว้นกรณีที่จำเป็นตามกฎหมายหรือเพื่อความปลอดภัยของระบบ
+                                </p>
+                            </div>
+                            <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                <p class="text-sm font-black text-white">สิทธิ์ของผู้ใช้งาน</p>
+                                <p class="mt-2 text-sm leading-7 text-slate-400">
+                                    ผู้ใช้งานสามารถติดต่อทีมงานเพื่อสอบถาม แก้ไข หรือขอลบข้อมูลบางส่วนได้ตามขอบเขตที่ระบบรองรับ
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- CREDITS MODAL START: safe to remove this block later if not needed -->
+                <template x-if="modal === 'credits'">
+                    <div class="space-y-8">
+                        <div>
+                            <span class="inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-amber-200">
+                                Project Credits
+                            </span>
+                            <h2 class="mt-5 text-3xl font-black tracking-tight text-white sm:text-4xl">
+                                ผู้จัดทำเว็บไซต์
+                            </h2>
+                            <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+                                เว็บไซต์ฉบับนี้เป็นผลงานโครงงานนักศึกษา มหาวิทยาลัยศรีปทุม เขตบางเขน
+                                โดยลิขสิทธิ์ด้านการออกแบบส่วนติดต่อผู้ใช้ การจัดวางหน้าเว็บ งานนำเสนอระบบ และรูปแบบเว็บไซต์ฉบับเดโม่
+                                เป็นของคณะผู้จัดทำตามรายชื่อด้านล่าง
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="relative overflow-hidden rounded-[1.75rem] border border-cyan-400/20 bg-[linear-gradient(135deg,rgba(8,20,38,0.96),rgba(14,33,58,0.9))] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+                                <div class="absolute -top-10 left-10 h-32 w-32 rounded-full bg-cyan-400/10 blur-[50px]"></div>
+                                <div class="absolute inset-y-0 left-0 w-1 animate-[pulse_2.2s_ease-in-out_infinite] bg-gradient-to-b from-cyan-300 via-blue-400 to-cyan-300"></div>
+                                <div class="relative flex flex-col gap-2 pl-3">
+                                    <div class="inline-flex items-center gap-2">
+                                        <span class="h-2.5 w-2.5 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_14px_rgba(103,232,249,0.95)]"></span>
+                                        <span class="text-[10px] font-black uppercase tracking-[0.26em] text-cyan-200">Lead Builder</span>
+                                    </div>
+                                    <p class="text-2xl font-black tracking-tight text-white sm:text-3xl">
+                                        Sorasak Sonkrai <span class="text-cyan-300">(HeadDEV)</span>
+                                    </p>
+                                    <p class="text-sm text-slate-300">
+                                        นักศึกษา มหาวิทยาลัยศรีปทุม เขตบางเขน ผู้รับผิดชอบงานพัฒนาหลัก การวางโครงสร้างระบบ
+                                        และการออกแบบแนวทางของเว็บไซต์ฉบับเดโม่
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                                <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                    <p class="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Tester</p>
+                                    <p class="mt-3 text-lg font-black text-white">Sorawit Treechot</p>
+                                    <p class="mt-2 text-sm text-slate-400">ผู้ทดสอบระบบหลักของโครงงาน</p>
+                                </div>
+                                <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                    <p class="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">ผู้ช่วย Tester</p>
+                                    <p class="mt-3 text-lg font-black text-white">Natthaphon Buran</p>
+                                    <p class="mt-2 text-sm text-slate-400">ผู้ช่วยตรวจสอบความถูกต้องของการใช้งานและการแสดงผล</p>
+                                </div>
+                                <div class="rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+                                    <p class="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">ผู้ช่วย Tester</p>
+                                    <p class="mt-3 text-lg font-black text-white">Jessadaporn Intraso</p>
+                                    <p class="mt-2 text-sm text-slate-400">ผู้ช่วยทดสอบประสบการณ์ผู้ใช้งานและความต่อเนื่องของระบบ</p>
+                                </div>
+                            </div>
+
+                            <div class="rounded-[1.5rem] border border-amber-400/15 bg-amber-400/5 p-5">
+                                <p class="text-sm font-black text-amber-200">ข้อความลิขสิทธิ์ที่แนะนำ</p>
+                                <p class="mt-3 text-sm leading-7 text-slate-300">
+                                    ลิขสิทธิ์งานออกแบบส่วนติดต่อผู้ใช้ การจัดวางเนื้อหา งานนำเสนอระบบ และองค์ประกอบเว็บไซต์ฉบับเดโม่นี้
+                                    เป็นของคณะผู้จัดทำโครงงานนักศึกษา มหาวิทยาลัยศรีปทุม เขตบางเขน
+                                    ห้ามคัดลอก ดัดแปลง หรือเผยแพร่เชิงพาณิชย์โดยไม่ได้รับอนุญาตจากผู้จัดทำ
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <!-- CREDITS MODAL END -->
+            </div>
         </div>
     </div>
-</footer>
+</div>

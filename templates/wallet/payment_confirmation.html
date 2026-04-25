@@ -1,44 +1,88 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-2xl mx-auto mt-10 px-4 mb-20">
-    <div class="bg-[#0A0F16] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-        <div class="bg-blue-600 p-8 text-center">
-            <h1 class="text-2xl font-black text-white italic uppercase tracking-widest">Payment Confirmation</h1>
-            <p class="text-blue-100 text-xs mt-1 uppercase tracking-widest opacity-80">กรุณาโอนเงินตามยอดที่ระบุข้างล่างนี้</p>
+<div class="max-w-2xl mx-auto mt-12 px-4 mb-20 relative">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[150%] bg-blue-600/5 blur-[100px] rounded-full pointer-events-none z-0"></div>
+
+    <div class="bg-[#070A10]/90 backdrop-blur-2xl border border-blue-500/20 rounded-[2.5rem] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.6)] relative z-10">
+
+        <div class="bg-gradient-to-r from-blue-900/50 to-[#070A10] border-b border-blue-500/30 p-8 text-center">
+            <h1 class="text-2xl font-black text-white italic uppercase tracking-widest">
+                ยืนยันการทำรายการ
+            </h1>
+            <p class="text-blue-400 text-[10px] font-black mt-2 uppercase tracking-[0.3em] flex items-center justify-center gap-2">
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse shadow-[0_0_8px_#3b82f6]"></span>
+                รอการชำระเงินจำลอง
+            </p>
         </div>
 
-        <div class="p-8 space-y-8 text-center">
+        <div class="p-8 sm:p-12 space-y-10 text-center">
             <div class="space-y-2">
-                <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.2em]">Total Amount to Pay</p>
-                <h2 class="text-5xl font-black text-white italic">฿{{ amount }}</h2>
+                <p class="text-slate-500 font-black uppercase text-[10px] tracking-[0.3em]">
+                    จำนวนเงินที่ต้องการเติม
+                </p>
+                <h2 class="text-5xl sm:text-6xl font-black text-white italic drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                    ฿{{ amount }}
+                </h2>
             </div>
 
-            <div class="relative inline-block p-4 bg-white rounded-2xl shadow-inner">
-                <div class="w-48 h-48 bg-slate-100 flex items-center justify-center border-2 border-dashed border-slate-300 rounded-xl">
-                    <span class="text-slate-400 font-bold text-xs">QR CODE HERE</span>
+            <div class="relative inline-block p-6 bg-[#030508] rounded-3xl border border-white/5 shadow-inner">
+                <div class="w-56 h-56 bg-white flex items-center justify-center rounded-xl relative overflow-hidden p-3">
+                    <img
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=PAPAYADEMO_{{ transaction_id }}"
+                        alt="QR Code"
+                        loading="eager"
+                        decoding="async"
+                        width="250"
+                        height="250"
+                        class="w-full h-full object-contain"
+                    >
+                    <div class="absolute top-0 left-0 w-full h-[3px] bg-blue-500 shadow-[0_0_15px_#3b82f6] animate-[scan_2s_linear_infinite]"></div>
                 </div>
             </div>
 
-            <div class="bg-white/5 border border-white/5 rounded-2xl p-6 text-left space-y-4">
-                <div class="flex justify-between items-center text-sm">
-                    <span class="text-slate-500 font-bold uppercase">Transaction ID</span>
-                    <span class="text-blue-400 font-black">{{ transaction_id }}</span>
+            <div class="bg-black/40 border border-white/5 rounded-2xl p-6 text-left text-xs font-mono space-y-3">
+                <div class="flex justify-between items-center gap-4">
+                    <span class="text-slate-500 uppercase tracking-widest">รหัสรายการ</span>
+                    <span class="text-blue-400 break-all text-right">{{ transaction_id }}</span>
                 </div>
-                <div class="flex justify-between items-center text-sm border-t border-white/5 pt-4">
-                    <span class="text-slate-500 font-bold uppercase">Account Name</span>
-                    <span class="text-white font-bold">PAPAYA GAME SHOP Co.</span>
+                <div class="flex justify-between items-center gap-4">
+                    <span class="text-slate-500 uppercase tracking-widest">ช่องทาง</span>
+                    <span class="text-white uppercase text-right">{{ method }} (โหมดทดลอง)</span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-3 pt-4">
-                <a href="{% url 'wallets:wallet_home' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-blue-600/20 uppercase tracking-widest text-sm">
-                    I Have Paid (Verify)
-                </a>
-                <a href="{% url 'wallets:top_up' %}" class="text-slate-500 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">
-                    Cancel Transaction
+            <div class="bg-blue-500/5 border border-blue-500/20 rounded-2xl p-4">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.16em]">
+                    สแกน QR นี้เพื่อจำลองการชำระเงิน หรือกดยืนยันด้านล่างเพื่อเติมเครดิตเข้าสู่ระบบ
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 pt-2">
+                <form action="{% url 'wallets:confirm_topup' %}" method="POST" x-data="{ loading: false }" @submit="loading = true">
+                    {% csrf_token %}
+                    <button
+                        type="submit"
+                        class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] uppercase tracking-[0.2em] text-[10px] hover:-translate-y-1 relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
+                        :disabled="loading"
+                    >
+                        <span x-show="!loading">ยืนยันการชำระเงินจำลอง</span>
+                        <span x-show="loading" class="animate-pulse" style="display: none;">กำลังประมวลผล...</span>
+                    </button>
+                </form>
+
+                <a href="{% url 'wallets:top_up' %}" class="text-slate-500 hover:text-white transition-colors text-[9px] font-black uppercase tracking-[0.2em] py-2">
+                    ยกเลิกรายการและกลับไปหน้าเติมเครดิต
                 </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+@keyframes scan {
+    0% { top: 0%; opacity: 0; }
+    50% { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+</style>
 {% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-[1500px] mx-auto py-10 px-4 mb-20 relative">
+    <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600/5 blur-[180px] rounded-full pointer-events-none z-0"></div>
+
+    <div class="mb-10 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+        <div>
+            <a href="{% url 'users:admin_dashboard' %}" class="text-blue-400 font-black uppercase text-sm mb-4 inline-flex items-center gap-2 hover:text-white transition-all group">
+                <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                กลับไปแดชบอร์ดผู้ดูแล
+            </a>
+            <h1 class="max-w-5xl text-3xl sm:text-4xl xl:text-5xl font-black text-white italic tracking-tight leading-[1.05] text-balance break-words">
+                คลังสินค้าเกม <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">{{ category.name }}</span>
+            </h1>
+            <p class="text-slate-400 font-bold tracking-[0.2em] text-[11px] mt-4 uppercase">
+                Game Stock Overview / Sales / Availability
+            </p>
+        </div>
+
+        <div class="flex flex-wrap gap-4">
+            <a href="/admin/store/tab01productall/add/" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black transition-all shadow-[0_0_20px_rgba(37,99,235,0.35)] text-xs uppercase tracking-widest active:scale-95">
+                เพิ่มสินค้าใหม่
+            </a>
+            <a href="/admin/store/tab01productall/?game__id__exact={{ category.id }}" class="bg-orange-500 hover:bg-orange-400 text-white px-6 py-3 rounded-2xl font-black transition-all shadow-[0_0_20px_rgba(249,115,22,0.35)] text-xs uppercase tracking-widest active:scale-95">
+                จัดการสินค้าเกมนี้
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10 relative z-10">
+        <div class="summary-card">
+            <p class="summary-label">จำนวนสินค้า</p>
+            <h4 class="summary-value text-white">{{ products.count }}</h4>
+            <span class="summary-sub">รายการทั้งหมดในเกมนี้</span>
+        </div>
+        <div class="summary-card">
+            <p class="summary-label">สินค้าพร้อมขาย</p>
+            <h4 class="summary-value text-green-300">{{ available_products }}</h4>
+            <span class="summary-sub">ยังซื้อได้ตามสถานะปัจจุบัน</span>
+        </div>
+        <div class="summary-card">
+            <p class="summary-label">สต็อกต่ำ</p>
+            <h4 class="summary-value text-amber-300">{{ low_stock_count }}</h4>
+            <span class="summary-sub">เหลือน้อยกว่า 10 ชิ้น</span>
+        </div>
+        <div class="summary-card">
+            <p class="summary-label">รายได้รวมเกมนี้</p>
+            <h4 class="summary-value text-blue-300">฿ {{ total_game_revenue|floatformat:0 }}</h4>
+            <span class="summary-sub">ขายแล้ว {{ total_sold_units|default:0 }} ชิ้น</span>
+        </div>
+    </div>
+
+    <div class="bg-[#05080F]/95 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-6 md:p-8 shadow-[0_40px_100px_rgba(0,0,0,0.55)] relative z-10 overflow-hidden">
+        <div class="overflow-x-auto custom-scrollbar pr-2">
+            <table class="w-full min-w-[980px] text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-white/10 text-slate-400 text-[11px] uppercase font-black tracking-[0.24em]">
+                        <th class="pb-5 pl-4 w-[42%]">สินค้า</th>
+                        <th class="pb-5 text-center">ขายแล้ว</th>
+                        <th class="pb-5 text-center">สต็อก</th>
+                        <th class="pb-5 text-right pr-6">สถานะ</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {% for item in products %}
+                    <tr class="group hover:bg-white/[0.03] transition-all duration-300 cursor-pointer" onclick="window.location='/admin/store/tab01productall/{{ item.id }}/change/'">
+                        <td class="py-5 pl-4">
+                            <div class="flex items-center gap-5">
+                                <div class="w-16 h-16 shrink-0 bg-white/5 rounded-2xl p-2 flex items-center justify-center overflow-hidden border border-white/10 group-hover:border-blue-500/50 transition-all">
+                                    {% if item.image %}
+                                    <img src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy" decoding="async" width="160" height="160" class="w-full h-full object-cover rounded-xl">
+                                    {% else %}
+                                    <span class="text-2xl font-black text-blue-400">{{ item.title|first|upper }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="font-black text-white text-lg group-hover:text-blue-400 transition-colors truncate">{{ item.title }}</p>
+                                    <div class="mt-2 flex flex-wrap gap-2">
+                                        <span class="inline-flex rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-[11px] font-black text-blue-300">
+                                            ฿ {{ item.price|floatformat:2 }}
+                                        </span>
+                                        {% if item.category %}
+                                        <span class="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-black text-slate-300">
+                                            {{ item.category.name }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-5 text-center">
+                            <div class="inline-flex min-w-[100px] flex-col items-center rounded-2xl border border-green-500/15 bg-green-500/5 px-4 py-3">
+                                <span class="text-2xl font-black text-green-300">{{ item.total_sales|default:0 }}</span>
+                                <span class="text-[10px] font-black uppercase tracking-[0.18em] text-green-500/80">ขายแล้ว</span>
+                            </div>
+                        </td>
+
+                        <td class="py-5 text-center">
+                            <span class="inline-flex min-w-[88px] justify-center rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-2xl font-black text-white">
+                                {{ item.stock }}
+                            </span>
+                        </td>
+
+                        <td class="py-5 pr-6">
+                            <div class="flex items-center justify-end gap-3">
+                                {% if item.is_available_for_sale %}
+                                <span class="inline-flex rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-[11px] font-black text-green-300">
+                                    พร้อมขาย
+                                </span>
+                                {% elif item.stock <= 0 %}
+                                <span class="inline-flex rounded-full border border-red-500/20 bg-red-500/10 px-4 py-2 text-[11px] font-black text-red-300">
+                                    สินค้าหมด
+                                </span>
+                                {% else %}
+                                <span class="inline-flex rounded-full border border-slate-500/20 bg-slate-500/10 px-4 py-2 text-[11px] font-black text-slate-300">
+                                    ไม่พร้อมขาย
+                                </span>
+                                {% endif %}
+
+                                <div class="w-11 h-11 shrink-0 bg-white/5 group-hover:bg-blue-600 text-slate-400 group-hover:text-white rounded-xl flex items-center justify-center transition-all border border-white/10 group-hover:border-blue-500">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="py-20 text-center text-slate-500 font-black">
+                            ยังไม่มีสินค้าในเกมนี้
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.summary-card {
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(5, 8, 15, 0.82);
+    backdrop-filter: blur(18px);
+    border-radius: 1.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 24px 50px rgba(0,0,0,0.25);
+}
+
+.summary-label {
+    color: #94a3b8;
+    font-size: 0.74rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+}
+
+.summary-value {
+    margin-top: 0.6rem;
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 900;
+}
+
+.summary-sub {
+    display: block;
+    margin-top: 0.7rem;
+    color: #cbd5e1;
+    font-size: 0.82rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(96,165,250,0.65); border-radius: 9999px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(96,165,250,0.9); }
+</style>
+{% endblock %}

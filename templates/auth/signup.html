@@ -1,49 +1,243 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-2xl mx-auto bg-[#0A0F16] border border-white/10 p-10 rounded-3xl shadow-2xl mt-10">
-    <div class="text-center mb-10">
-        <h2 class="text-4xl font-black text-white italic uppercase">JOIN THE <span class="text-blue-500">SHOP</span></h2>
-        <p class="text-slate-500 mt-2 text-xs uppercase tracking-widest">สร้างบัญชีนักบิน เพื่อเริ่มสะสมไอเท็มระดับเทพ</p>
-    </div>
-    
-    <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="space-y-2">
-            <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ field.label }}</label>
-            {{ field }}
+<div class="relative mx-auto mt-8 mb-14 max-w-2xl px-3 sm:mt-12 sm:mb-20 sm:px-4">
+    <div class="absolute inset-0 -z-10 rounded-full bg-cyan-500/10 blur-[100px] sm:blur-[120px]"></div>
+    <div class="absolute right-10 top-12 -z-10 h-32 w-32 rounded-full bg-blue-500/10 blur-[80px] sm:h-44 sm:w-44 sm:blur-[95px]"></div>
+
+    <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#070A10]/90 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-8 md:p-12">
+        <div class="pointer-events-none absolute right-0 top-0 h-16 w-16 rounded-tr-[2rem] border-r-2 border-t-2 border-blue-500/40 sm:h-24 sm:w-24 sm:rounded-tr-[2.5rem]"></div>
+        <div class="pointer-events-none absolute bottom-0 left-0 h-16 w-16 rounded-bl-[2rem] border-b-2 border-l-2 border-cyan-400/30 sm:h-24 sm:w-24 sm:rounded-bl-[2.5rem]"></div>
+
+        <div class="mb-8 text-center sm:mb-10">
+            <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-slate-900/90 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-cyan-200 sm:mb-5 sm:text-sm sm:tracking-[0.28em]">
+                <span class="h-2 w-2 rounded-full bg-cyan-300"></span>
+                Register
+            </div>
+            <div class="mx-auto mb-5 h-1 w-16 rounded-full bg-blue-500/80"></div>
+            <h1 class="mx-auto max-w-[11ch] text-[clamp(2rem,10vw,3.5rem)] font-black italic leading-[0.9] tracking-[-0.05em] text-white">
+                <span class="block">สมัครสมาชิก</span>
+                <span class="mt-1 block bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                    PAPAYA<br class="sm:hidden"> GAME SHOP
+                </span>
+            </h1>
+            <p class="mt-3 text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 sm:text-[11px] sm:tracking-[0.22em]">
+                สมัครใช้งานจริง / ระบบป้องกันบัญชีอัตโนมัติ
+            </p>
         </div>
-        {% endfor %}
-        
-        <div class="md:col-span-2 mt-4">
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-xl uppercase transition shadow-lg shadow-blue-600/20">
-                Initialize Account
-            </button>
+
+        {% if form.non_field_errors %}
+        <div class="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-4 text-sm font-bold text-red-300">
+            {{ form.non_field_errors|striptags }}
         </div>
-    </form>
+        {% endif %}
 
-    <div class="relative my-8">
-        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
-        <div class="relative flex justify-center text-[10px] font-black uppercase tracking-widest"><span class="bg-[#0A0F16] px-4 text-slate-500">Or Demo Register</span></div>
-    </div>
+        <div class="mb-6 rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-4 text-sm leading-6 text-blue-100 sm:px-5">
+            ระบบใช้ Captcha เพื่อป้องกันบัญชีปลอมและการสมัครแบบอัตโนมัติ
+        </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <button onclick="alert('DEMO: Google Register Service is offline for maintenance.')" 
-                class="flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-white font-bold py-3.5 rounded-xl transition">
-            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg> Google
-        </button>
-        <button onclick="alert('DEMO: Facebook Syncing... Please try again later.')" 
-                class="flex items-center justify-center bg-[#1877F2]/10 hover:bg-[#1877F2]/20 border border-[#1877F2]/30 text-[#1877F2] font-bold py-3.5 rounded-xl transition">
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg> Facebook
-        </button>
-    </div>
+        <form method="POST" novalidate id="signup-form" class="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="space-y-2 {% if field.name == 'username' or field.name == 'email' or field.name == 'phone_number' %}md:col-span-2{% endif %}">
+                <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 sm:text-[11px]" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                <p class="hidden text-xs font-bold text-amber-300" data-client-error-for="{{ field.name }}"></p>
+                {% if field.errors %}
+                <p class="text-xs font-bold text-red-400" data-server-error-for="{{ field.name }}">{{ field.errors|striptags }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
 
-    <div class="mt-8 text-center text-sm text-slate-400">
-        Already part of the fleet? <a href="{% url 'users:login' %}" class="text-blue-500 font-bold hover:underline">Log in</a>
+            <div id="signup-captcha-block" class="space-y-2 md:col-span-2 hidden">
+                <label class="block text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 sm:text-[11px]">
+                    ยืนยัน Captcha
+                </label>
+                <div class="rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-4">
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-200">{{ captcha_reason }}</p>
+                    <p class="mt-2 text-xl font-black text-white sm:text-2xl">{{ captcha_question }}</p>
+                </div>
+                <input
+                    type="text"
+                    id="signup-captcha-answer"
+                    name="captcha_answer"
+                    inputmode="numeric"
+                    placeholder="{{ captcha_placeholder }}"
+                    class="w-full rounded-2xl border border-white/10 bg-[#060B12] px-4 py-3.5 text-white outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                >
+            </div>
+
+            <div class="pt-2 md:col-span-2 sm:pt-4">
+                <button type="submit" id="signup-submit-button" class="flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 py-4 text-xs font-black uppercase tracking-[0.16em] text-white transition-all hover:-translate-y-0.5 hover:from-blue-500 hover:to-cyan-400 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.45)] disabled:cursor-not-allowed disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-400 disabled:shadow-none sm:py-5 sm:text-sm sm:tracking-[0.18em]">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3"></path>
+                    </svg>
+                    สร้างบัญชีสมาชิก
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-8 text-center text-[14px] font-bold text-slate-400 sm:text-[15px]">
+            มีบัญชีอยู่แล้ว?
+            <a href="{% url 'users:login' %}" class="ml-1 border-b border-blue-500/50 pb-0.5 text-blue-400 transition-colors hover:border-blue-300 hover:text-blue-300">
+                เข้าสู่ระบบ
+            </a>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        const form = document.getElementById("signup-form");
+        if (!form) return;
+
+        const usernameInput = form.querySelector("[name='username']");
+        const emailInput = form.querySelector("[name='email']");
+        const phoneInput = form.querySelector("[name='phone_number']");
+        const passwordInput = form.querySelector("[name='password1']");
+        const passwordConfirmInput = form.querySelector("[name='password2']");
+        const captchaBlock = document.getElementById("signup-captcha-block");
+        const captchaInput = document.getElementById("signup-captcha-answer");
+        const submitButton = document.getElementById("signup-submit-button");
+
+        const showClientError = function (fieldName, message) {
+            const node = form.querySelector(`[data-client-error-for="${fieldName}"]`);
+            if (!node) return;
+            if (message) {
+                node.textContent = message;
+                node.classList.remove("hidden");
+            } else {
+                node.textContent = "";
+                node.classList.add("hidden");
+            }
+        };
+
+        const hideServerError = function (fieldName) {
+            const node = form.querySelector(`[data-server-error-for="${fieldName}"]`);
+            if (node) node.classList.add("hidden");
+        };
+
+        const validateUsername = function () {
+            const value = usernameInput.value.trim();
+            if (!value) return true;
+            if (!/^[A-Za-z0-9]+$/.test(value)) {
+                showClientError("username", "ชื่อผู้ใช้ใช้ได้เฉพาะภาษาอังกฤษและตัวเลข 0-9 เท่านั้น");
+                return false;
+            }
+            showClientError("username", "");
+            return true;
+        };
+
+        const validateEmail = function () {
+            const value = emailInput.value.trim();
+            if (!value) return true;
+            if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/.test(value)) {
+                showClientError("email", "กรุณากรอกอีเมลให้ถูกต้อง เช่น name@example.com");
+                return false;
+            }
+            showClientError("email", "");
+            return true;
+        };
+
+        const validatePhone = function () {
+            const value = phoneInput.value.trim();
+            if (!value) return true;
+            if (!/^[0-9]{9,15}$/.test(value)) {
+                showClientError("phone_number", "กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลข 9-15 หลัก");
+                return false;
+            }
+            showClientError("phone_number", "");
+            return true;
+        };
+
+        const validatePassword = function () {
+            const value = passwordInput.value;
+            if (!value) return true;
+            if (value.length < 8) {
+                showClientError("password1", "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
+                return false;
+            }
+            showClientError("password1", "");
+            return true;
+        };
+
+        const validatePasswordConfirm = function () {
+            const value = passwordConfirmInput.value;
+            if (!value) return true;
+            if (value !== passwordInput.value) {
+                showClientError("password2", "รหัสผ่านยืนยันไม่ตรงกัน");
+                return false;
+            }
+            showClientError("password2", "");
+            return true;
+        };
+
+        const updateCaptchaGate = function () {
+            const fieldsComplete = [
+                usernameInput,
+                emailInput,
+                phoneInput,
+                passwordInput,
+                passwordConfirmInput,
+            ].every(function (input) {
+                return input && input.value.trim() !== "";
+            });
+
+            const validationsPassed = [
+                validateUsername(),
+                validateEmail(),
+                validatePhone(),
+                validatePassword(),
+                validatePasswordConfirm(),
+            ].every(Boolean);
+
+            if (captchaBlock) {
+                captchaBlock.classList.toggle("hidden", !(fieldsComplete && validationsPassed));
+            }
+
+            if (submitButton) {
+                submitButton.disabled = !(fieldsComplete && validationsPassed && captchaInput && captchaInput.value.trim() !== "");
+            }
+        };
+
+        [usernameInput, emailInput, phoneInput, passwordInput, passwordConfirmInput].forEach(function (input) {
+            if (!input) return;
+            input.addEventListener("input", function () {
+                hideServerError(input.name);
+                if (input === usernameInput) validateUsername();
+                if (input === emailInput) validateEmail();
+                if (input === phoneInput) validatePhone();
+                if (input === passwordInput) {
+                    validatePassword();
+                    validatePasswordConfirm();
+                }
+                if (input === passwordConfirmInput) validatePasswordConfirm();
+                updateCaptchaGate();
+            });
+        });
+
+        if (captchaInput) {
+            captchaInput.addEventListener("input", updateCaptchaGate);
+        }
+
+        form.addEventListener("submit", function (event) {
+            const isValid = [
+                validateUsername(),
+                validateEmail(),
+                validatePhone(),
+                validatePassword(),
+                validatePasswordConfirm(),
+            ].every(Boolean);
+
+            if (!isValid || !captchaInput || !captchaInput.value.trim()) {
+                event.preventDefault();
+            }
+        });
+
+        updateCaptchaGate();
+    })();
+</script>
 {% endblock %}

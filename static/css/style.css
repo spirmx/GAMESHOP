@@ -1,155 +1,147 @@
-/* ================================================================
-    NEBULA MASTER THEME v4.5 - [FINAL ORGANIZED ARCHITECTURE]
-    Project: PAPAYA SHOP (ICT SPU)
-    Structure: Variables > Base > Components > Modules > Utils
-================================================================
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800;900&display=swap');
-
-/* ------------------------------------------------------------
-   [01] CORE CONSTANTS - แกนกลางสีและมิติ
-   ------------------------------------------------------------ */
-:root {
-    /* 🎨 Branding Colors */
-    --primary:        #4f46e5;        /* Indigo-Blue */
-    --primary-glow:   rgba(79, 70, 229, 0.4);
-    --accent:         #6366f1;            
-    --commander:      #fbbf24;        /* Gold/Admin Accent */
-    
-    /* 🌑 Surface Architecture */
-    --dark-bg:        #030508;        
-    --surface:        #0B0F19;        /* Card Background */
-    --surface-light:  #111827;
-    --border:         rgba(255, 255, 255, 0.05);
-    --border-hover:   rgba(79, 70, 229, 0.5);
-    
-    /* 📝 Typography Palette */
-    --text-main:      #FFFFFF;         
-    --text-body:      #94A3B8;         
-    --text-muted:     #475569;        
+html,
+body {
+    min-height: 100%;
+    background-color: #030508;
 }
 
-/* ------------------------------------------------------------
-   [02] GLOBAL BASE - รากฐานโครงสร้างเว็บ
-   ------------------------------------------------------------ */
 body {
     font-family: 'Prompt', sans-serif;
-    background-color: var(--dark-bg);
-    color: var(--text-body);
-    background-image: 
-        radial-gradient(circle at top left, rgba(79, 70, 229, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.03) 0%, transparent 50%);
+    background:
+        radial-gradient(circle at top, rgba(37, 99, 235, 0.10), transparent 28%),
+        radial-gradient(circle at right, rgba(34, 211, 238, 0.08), transparent 24%),
+        linear-gradient(180deg, #030508 0%, #05080f 46%, #030508 100%);
+    color: #e2e8f0;
+    position: relative;
     background-attachment: fixed;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
 }
 
-/* ------------------------------------------------------------
-   [03] TYPOGRAPHY SYSTEM - ระบบตัวอักษร
-   ------------------------------------------------------------ */
-h1, h2, h3, h4 {
-    color: var(--text-main);
-    @apply italic uppercase tracking-tighter;
+html,
+body {
+    overflow-x: hidden;
 }
 
-h1 { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; line-height: 0.9; }
-h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; }
-
-.item-title-detail {
-    @apply text-3xl md:text-5xl font-black text-white leading-[1.1] mb-4;
+img {
+    max-width: 100%;
+    height: auto;
 }
 
-.item-title-card {
-    @apply text-lg font-extrabold text-white leading-tight mb-3 line-clamp-2 min-h-[2.8rem] transition-colors group-hover:text-blue-400;
+input,
+select,
+textarea,
+button {
+    font: inherit;
 }
 
-/* ------------------------------------------------------------
-   [04] UI ATOMS - ส่วนประกอบย่อย (Buttons & Inputs)
-   ------------------------------------------------------------ */
-.btn-neon {
-    @apply flex justify-center items-center cursor-pointer transition-all duration-300;
-    @apply bg-gradient-to-br from-indigo-500 to-indigo-700 text-white font-extrabold;
-    @apply text-sm uppercase tracking-widest rounded-2xl px-8 py-5;
-    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.2);
+.stars-moving {
+    position: relative;
 }
 
-.btn-neon:hover { @apply -translate-y-1 brightness-110; box-shadow: 0 12px 25px rgba(79, 70, 229, 0.4); }
-
-.qty-btn {
-    @apply flex items-center justify-center transition-all bg-white/5 text-slate-500 border border-white/5 w-8 h-8 rounded-lg;
-}
-.qty-btn:hover { @apply bg-indigo-600 text-white border-indigo-600; }
-
-.uid-input, input[type="text"], input[type="email"], input[type="password"] {
-    @apply bg-black/50 border-2 border-white/5 rounded-2xl text-white px-6 py-5 font-semibold transition-all duration-400 focus:outline-none;
-}
-.uid-input:focus { @apply border-indigo-500 bg-indigo-500/10; box-shadow: 0 0 25px rgba(79, 70, 229, 0.2); }
-
-/* ------------------------------------------------------------
-   [05] LAYOUT MODULES - การ์ดและตู้คอนเทนเนอร์
-   ------------------------------------------------------------ */
-.admin-card, .game-card, .product-card {
-    @apply bg-slate-900/60 border border-white/5 backdrop-blur-xl rounded-[1.5rem] p-8 transition-all duration-500;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+.stars-moving::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.75), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, rgba(226,232,240,0.45), rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    animation: stars-animation 100s linear infinite;
+    opacity: 1;
 }
 
-.admin-card:hover {
-    @apply -translate-y-2 scale-[1.01] border-indigo-500/50 bg-slate-800/80;
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), 0 0 25px rgba(79, 70, 229, 0.15);
+@keyframes stars-animation {
+    from { background-position: 0 0; }
+    to { background-position: -1000px 1000px; }
 }
 
-.product-image-container {
-    @apply relative aspect-square overflow-hidden bg-gradient-to-b from-white/5 to-transparent rounded-2xl border border-white/5 p-8;
+.card {
+    background: rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
 }
 
-.product-grid-pro {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8;
+.btn {
+    background: linear-gradient(to right, #2563eb, #0891b2);
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.9rem;
+    font-weight: 800;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    box-shadow: 0 0 24px rgba(37, 99, 235, 0.22);
 }
 
-/* ------------------------------------------------------------
-   [06] INTERFACE ELEMENTS - ระบบเมนูและใบเสร็จ
-   ------------------------------------------------------------ */
-/* Dropdown Navigation */
-.premium-dropdown { @apply bg-[#0B0F19] border border-white/5 rounded-2xl shadow-2xl overflow-hidden; }
-.dropdown-item { @apply flex items-center gap-3 px-5 py-3 rounded-xl m-1 transition-all text-sm font-extrabold italic no-underline text-slate-400; }
-.dropdown-item:hover { @apply bg-white/5 translate-x-1; }
-
-/* Mission Receipt Section */
-.receipt-container { @apply max-w-[1100px] mx-auto py-12 px-4 mb-20; }
-.mission-header { @apply mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-l-4 border-green-500 pl-6; }
-.table-head-row { @apply bg-black/40 text-slate-500 text-[9px] uppercase font-black tracking-widest border-b border-white/5; }
-
-/* Key Management Display */
-.key-grid { @apply grid grid-cols-1 lg:grid-cols-2 gap-2 max-w-[500px]; }
-.key-badge { @apply flex items-center justify-between bg-white/5 border border-white/5 px-3 py-1.5 rounded-md transition-all hover:border-blue-500/30; }
-.key-text { @apply text-[10px] font-mono font-bold text-blue-400 tracking-wider select-all; }
-
-/* ------------------------------------------------------------
-   [07] MODAL SYSTEM - หน้าต่างแสดงผลแบบขยาย
-   ------------------------------------------------------------ */
-.modal-content-pro {
-    @apply relative bg-[#0B0F19] border border-blue-500/30 rounded-[2.5rem] w-full max-w-5xl overflow-hidden flex flex-col md:flex-row z-10;
-    max-height: 85vh;
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
 }
 
-.modal-left-img { @apply md:w-5/12 bg-black p-10 flex items-center justify-center border-r border-white/5; }
-.modal-right-info { @apply md:w-7/12 p-10 md:p-12 flex flex-col justify-center overflow-y-auto; }
-
-/* ------------------------------------------------------------
-   [08] UTILITIES & FX - เอฟเฟกต์ตกแต่ง
-   ------------------------------------------------------------ */
-.game-badge-label {
-    @apply text-blue-500 text-[11px] font-black uppercase tracking-[0.25em] mb-2 block italic;
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+.input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 0.9rem;
+    padding: 0.85rem 1rem;
+    color: white;
+    backdrop-filter: blur(10px);
 }
 
-.cyber-num {
-    @apply font-black italic text-white tracking-tighter;
-    text-shadow: 1.5px 0px 0px rgba(0, 255, 255, 0.8), -1.5px 0px 0px rgba(255, 0, 50, 0.8);
+.input:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.9);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
-.price-display-pro { @apply text-3xl cyber-num; }
-.gradient-text { @apply bg-gradient-to-r from-white to-indigo-500 bg-clip-text text-transparent; }
+.table th {
+    color: #94a3b8;
+    font-size: 12px;
+    text-transform: uppercase;
+}
 
-.cart-count-badge { @apply bg-indigo-600 px-2 py-0.5 rounded-lg font-black text-[10px]; box-shadow: 0 0 15px rgba(79, 70, 229, 0.4); }
+.table td {
+    padding: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #3b82f6, #06b6d4);
+    border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #60a5fa;
+}
+
+.platform-slider-viewport {
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+}
+
+.platform-game-card {
+    scroll-snap-align: start;
+}
+
+@media (max-width: 1279px) {
+    body {
+        background-attachment: scroll;
+    }
+}
+
+@media (max-width: 1023px) {
+    .hero-nav {
+        display: none;
+    }
+}

@@ -1,109 +1,917 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="max-w-[1800px] mx-auto space-y-16 sm:space-y-24 py-6 px-4">
-    
-    <div class="text-center py-16 sm:py-24 bg-gradient-to-b from-blue-600/10 to-transparent rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden">
-        <div class="relative z-10">
-            <h1 class="text-5xl sm:text-8xl font-black text-white mb-6 italic tracking-tighter uppercase leading-none">
-                LEVEL UP YOUR <span class="text-blue-500">GAME</span>
-            </h1>
-            <p class="text-slate-500 font-bold uppercase tracking-[0.4em] text-[10px] sm:text-xs">
-                ศูนย์รวมไอเท็มดิจิทัลและคีย์เกมระดับพรีเมียม
+<div class="max-w-[1680px] mx-auto px-4 sm:px-5 py-5 sm:py-8 space-y-10 sm:space-y-16 overflow-hidden">
+
+    <section class="hero-slider relative overflow-hidden rounded-[1.75rem] sm:rounded-[3rem] border border-white/5 bg-[#071019] shadow-[0_25px_80px_rgba(0,0,0,0.35)]" data-slider>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
+        <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[70%] h-72 bg-blue-500/20 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500/10 blur-[120px] rounded-full"></div>
+        <div class="absolute top-10 left-10 w-32 h-32 border border-white/5 rounded-full opacity-30"></div>
+        <div class="absolute bottom-10 right-10 w-24 h-24 border border-blue-500/10 rounded-full opacity-40"></div>
+
+        <div class="relative z-10 overflow-hidden">
+            <div class="hero-slides flex transition-transform duration-700 ease-out">
+                <article class="hero-slide min-w-full px-5 sm:px-10 lg:px-14 py-10 sm:py-16 lg:py-20">
+                    <div class="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 mb-6">
+                                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                                <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] text-blue-300">
+                                    ร้านเกมดิจิทัลพรีเมียม
+                                </span>
+                            </div>
+
+                            <h1 class="text-4xl sm:text-6xl xl:text-[5.5rem] font-black text-white italic uppercase tracking-tight leading-[0.95] drop-shadow-2xl">
+                                เติมความมันส์
+                                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-500">
+                                    ให้เกมของคุณ
+                                </span>
+                            </h1>
+
+                            <p class="mt-5 max-w-2xl text-sm sm:text-base text-slate-300 leading-7 font-medium">
+                                ศูนย์รวมไอเท็มดิจิทัล, คีย์เกม, เติมเงิน และแพ็กเกจระดับพรีเมียม
+                                ที่ออกแบบมาให้เลือกง่าย สวย อ่านสบาย และพร้อมช้อปได้ทันที
+                            </p>
+
+                            <div class="mt-8 flex flex-wrap gap-3">
+                                <a href="{% url 'product_list' %}" class="inline-flex items-center gap-2 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.16em] transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(37,99,235,0.35)]">
+                                    เข้าร้านค้า
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </a>
+                                <a href="#games" class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-white px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.16em] transition-all hover:-translate-y-1">
+                                    เลือกเกม
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="rounded-[1.75rem] border border-blue-500/10 bg-gradient-to-r from-blue-500/10 via-white/[0.03] to-cyan-500/10 p-5 sm:p-6">
+                            <p class="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400 mb-3">เหตุผลที่ผู้เล่นเลือกซื้อกับเรา</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div class="rounded-xl bg-black/20 border border-white/5 px-4 py-3">
+                                    <p class="text-sm font-black text-white">ส่งไว</p>
+                                    <p class="text-xs text-slate-400 mt-1">เติมไว ใช้งานง่าย ไม่งง</p>
+                                </div>
+                                <div class="rounded-xl bg-black/20 border border-white/5 px-4 py-3">
+                                    <p class="text-sm font-black text-white">เชื่อถือได้</p>
+                                    <p class="text-xs text-slate-400 mt-1">แพ็กเกจคัดแล้ว พร้อมขายจริง</p>
+                                </div>
+                                <div class="rounded-xl bg-black/20 border border-white/5 px-4 py-3">
+                                    <p class="text-sm font-black text-white">ใช้งานสบายตา</p>
+                                    <p class="text-xs text-slate-400 mt-1">อ่านง่าย เลือกของง่ายขึ้น</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="hero-slide min-w-full px-5 sm:px-10 lg:px-14 py-10 sm:py-16 lg:py-20">
+                    <div class="grid grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 mb-6">
+                                <span class="w-2 h-2 rounded-full bg-cyan-300 animate-pulse"></span>
+                                <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] text-cyan-300">
+                                    เข้าหน้าเติมเงินได้ไว
+                                </span>
+                            </div>
+
+                            <h2 class="text-4xl sm:text-6xl xl:text-[5rem] font-black text-white italic uppercase tracking-tight leading-[0.95]">
+                                เติมเงิน
+                                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-500">
+                                    ง่ายและเร็ว
+                                </span>
+                            </h2>
+
+                            <p class="mt-5 max-w-2xl text-sm sm:text-base text-slate-300 leading-7 font-medium">
+                                เข้าหน้าเติมเงินของเว็บได้ตรง ๆ ไม่ต้องไล่หาหมวดหลายชั้น
+                                เหมาะกับคนที่ต้องการเติมไวและกดซื้อได้ทันที
+                            </p>
+
+                            <div class="mt-8 flex flex-wrap gap-3">
+                                <a href="{% url 'wallets:top_up' %}" class="inline-flex items-center gap-2 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.16em] transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(34,211,238,0.35)]">
+                                    ไปหน้าเติมเงิน
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </a>
+                                <a href="{% url 'product_list' %}" class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-white px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.16em] transition-all hover:-translate-y-1">
+                                    ดูสินค้า
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="rounded-[1.75rem] border border-white/5 bg-white/[0.03] p-5 sm:p-6 backdrop-blur-md">
+                                <p class="text-sm font-black text-white">เข้าตรงหน้าเติมเงิน</p>
+                                <p class="text-xs text-slate-400 mt-2">กดครั้งเดียวก็ไปหน้าที่ต้องการได้เลย</p>
+                            </div>
+                            <div class="rounded-[1.75rem] border border-white/5 bg-white/[0.03] p-5 sm:p-6 backdrop-blur-md">
+                                <p class="text-sm font-black text-white">ขั้นตอนไม่เยอะ</p>
+                                <p class="text-xs text-slate-400 mt-2">ลดความซับซ้อนในการหาสินค้าและแพ็กเกจ</p>
+                            </div>
+                            <div class="rounded-[1.75rem] border border-white/5 bg-white/[0.03] p-5 sm:p-6 backdrop-blur-md">
+                                <p class="text-sm font-black text-white">พร้อมใช้งานตลอด</p>
+                                <p class="text-xs text-slate-400 mt-2">เหมาะกับคนที่อยากเติมไวเมื่อไหร่ก็ได้</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="hero-slide min-w-full px-5 sm:px-10 lg:px-14 py-10 sm:py-16 lg:py-20">
+                    <div class="grid grid-cols-1 xl:grid-cols-[1.15fr_0.85fr] gap-10 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/20 bg-fuchsia-500/10 px-4 py-2 mb-6">
+                                <span class="w-2 h-2 rounded-full bg-fuchsia-300 animate-pulse"></span>
+                                <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.18em] text-fuchsia-300">
+                                    หมวดเด่นคัดมาให้
+                                </span>
+                            </div>
+
+                            <h2 class="text-4xl sm:text-6xl xl:text-[5rem] font-black text-white italic uppercase tracking-tight leading-[0.95]">
+                                เลือกทางที่ใช่
+                                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-300 via-pink-300 to-blue-400">
+                                    แล้วเข้าได้เลย
+                                </span>
+                            </h2>
+
+                            <p class="mt-5 max-w-2xl text-sm sm:text-base text-slate-300 leading-7 font-medium">
+                                จะเข้าร้านรวม, ดูเกม, หรือเข้าหน้าเติมเงินโดยตรงก็เลือกได้จากหน้าเดียว
+                                ทำให้หน้าแรกมีประโยชน์ขึ้นและใช้งานง่ายกว่าเดิม
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <a href="{% url 'product_list' %}?platform=PC" class="block rounded-[1.75rem] border border-cyan-500/10 bg-gradient-to-br from-cyan-500/10 via-[#0A0F16] to-[#09111A] p-6 hover:border-cyan-400/35 transition-all duration-300 hover:-translate-y-1">
+                                <p class="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-300 mb-2">PC</p>
+                                <h3 class="text-2xl font-black text-white uppercase tracking-tight mb-2">เกม PC</h3>
+                                <p class="text-sm text-slate-300 leading-6">รวมไอเท็มและคีย์เกมสำหรับสายพีซีแบบเน้น ๆ</p>
+                            </a>
+
+                            <a href="{% url 'product_list' %}?platform=Mobile" class="block rounded-[1.75rem] border border-fuchsia-500/10 bg-gradient-to-br from-fuchsia-500/10 via-[#0A0F16] to-[#09111A] p-6 hover:border-fuchsia-400/35 transition-all duration-300 hover:-translate-y-1">
+                                <p class="text-[10px] font-black uppercase tracking-[0.16em] text-fuchsia-300 mb-2">Mobile</p>
+                                <h3 class="text-2xl font-black text-white uppercase tracking-tight mb-2">เกมมือถือ</h3>
+                                <p class="text-sm text-slate-300 leading-6">แพ็กเกจยอดนิยมสำหรับผู้เล่นมือถือที่อยากกดจบไว</p>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <button type="button" class="hero-nav hero-nav-prev" data-slider-prev aria-label="Previous slide">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+
+        <button type="button" class="hero-nav hero-nav-next" data-slider-next aria-label="Next slide">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+
+        <div class="relative z-10 border-t border-white/5 px-6 sm:px-10 lg:px-14 py-4 bg-black/10">
+            <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.16em] text-slate-400">
+                <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-400"></span>ส่งไวทันที</span>
+                <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-400"></span>หมวดเกมยอดนิยม</span>
+                <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-cyan-300"></span>สินค้าเกมพรีเมียม</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6">
+        <a href="{% url 'product_list' %}?q=valorant" class="group relative rounded-[1.75rem] border border-blue-500/15 bg-gradient-to-r from-blue-900/30 via-[#0A0F16] to-[#0A0F16] p-7 sm:p-8 overflow-hidden hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_40px_rgba(59,130,246,0.16)]">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.18),transparent_35%)] opacity-80"></div>
+            <div class="relative z-10 max-w-[75%]">
+                <span class="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/25 text-red-400 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.16em] mb-4">
+                    <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                    โปรแรง
+                </span>
+                <h3 class="text-2xl sm:text-3xl font-black text-white italic uppercase tracking-tight mb-2 group-hover:text-blue-400 transition-colors">
+                    Valorant Point
+                </h3>
+                <p class="text-sm sm:text-base text-slate-300 font-bold leading-6">
+                    ลดราคาพิเศษ 20% ทุกแพ็กเกจ พร้อมดีลเด่นสำหรับผู้เล่นสายเติมไว
+                </p>
+                <div class="mt-5 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-blue-300">
+                    ดูสินค้า
+                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="absolute -right-4 -bottom-6 text-[7rem] sm:text-[8rem] opacity-15 group-hover:scale-110 group-hover:-rotate-12 transition-all duration-700">🔫</div>
+        </a>
+
+        <a href="{% url 'product_list' %}?q=genshin" class="group relative rounded-[1.75rem] border border-fuchsia-500/15 bg-gradient-to-r from-fuchsia-900/25 via-[#0A0F16] to-[#0A0F16] p-7 sm:p-8 overflow-hidden hover:border-fuchsia-500/35 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_0_40px_rgba(192,38,211,0.14)]">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(217,70,239,0.16),transparent_35%)] opacity-80"></div>
+            <div class="relative z-10 max-w-[75%]">
+                <span class="inline-flex items-center gap-2 bg-fuchsia-500/10 border border-fuchsia-500/25 text-fuchsia-300 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-[0.16em] mb-4">
+                    <span class="w-2 h-2 rounded-full bg-fuchsia-300 animate-pulse"></span>
+                    มาใหม่
+                </span>
+                <h3 class="text-2xl sm:text-3xl font-black text-white italic uppercase tracking-tight mb-2 group-hover:text-fuchsia-300 transition-colors">
+                    Genshin Crystals
+                </h3>
+                <p class="text-sm sm:text-base text-slate-300 font-bold leading-6">
+                    แพ็กเกจยอดนิยมและพรแห่งดวงจันทร์ มาในดีไซน์ร้านที่ช้อปง่ายขึ้นกว่าเดิม
+                </p>
+                <div class="mt-5 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-fuchsia-300">
+                    ดูข้อเสนอ
+                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="absolute -right-4 -bottom-6 text-[7rem] sm:text-[8rem] opacity-15 group-hover:scale-110 group-hover:rotate-12 transition-all duration-700">💎</div>
+        </a>
+    </section>
+
+    <section class="space-y-5" data-platform-filter>
+        <div class="flex flex-wrap justify-center gap-3">
+            <button type="button" data-platform-button="all" class="px-6 sm:px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 hover:text-white transition-all font-black uppercase text-[10px] sm:text-[11px] tracking-[0.16em] border-blue-500 text-white bg-blue-600 shadow-[0_0_20px_rgba(59,130,246,0.35)]">
+                ทั้งหมด
+            </button>
+
+            <button type="button" data-platform-button="pc" class="px-6 sm:px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 hover:text-white transition-all font-black uppercase text-[10px] sm:text-[11px] tracking-[0.16em] text-slate-400">
+                PC
+            </button>
+
+            <button type="button" data-platform-button="mobile" class="px-6 sm:px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 hover:text-white transition-all font-black uppercase text-[10px] sm:text-[11px] tracking-[0.16em] text-slate-400">
+                Mobile
+            </button>
+
+            <button type="button" data-platform-button="pc/mobile" class="px-6 sm:px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 hover:text-white transition-all font-black uppercase text-[10px] sm:text-[11px] tracking-[0.16em] text-slate-400">
+                PC/Mobile
+            </button>
+        </div>
+
+        <p class="text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+            กรองตามแพลตฟอร์มแล้วเข้าไปดูสินค้าได้ทันที
+        </p>
+    </section>
+
+    <section id="games" class="space-y-8 sm:space-y-10">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <h2 class="text-2xl sm:text-3xl font-black text-white italic uppercase tracking-tight shrink-0">
+                    เลือก <span class="text-blue-500">เกมของคุณ</span>
+                </h2>
+                <div class="hidden sm:block flex-grow w-32 h-px bg-gradient-to-r from-white/10 to-transparent"></div>
+            </div>
+            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500" data-platform-count>
+                มีทั้งหมด {{ games|length }} หมวดเกม
             </p>
         </div>
-        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-blue-600/20 blur-[120px] rounded-full"></div>
-    </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="admin-card !p-8 bg-gradient-to-r from-blue-900/30 to-transparent border-blue-500/20 relative overflow-hidden group cursor-pointer">
-            <div class="relative z-10">
-                <span class="bg-red-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg shadow-red-500/20">🔥 Flash Sale</span>
-                <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter mb-2">Valorant Point</h3>
-                <p class="text-blue-400 font-bold text-sm">ลดราคาพิเศษ 20% ทุกแพ็กเกจ วันนี้เท่านั้น!</p>
-            </div>
-            <div class="absolute -right-10 -bottom-10 opacity-20 group-hover:scale-110 transition-transform duration-500">
-                <span class="text-9xl">🔫</span>
-            </div>
-        </div>
-
-        <div class="admin-card !p-8 bg-gradient-to-r from-purple-900/30 to-transparent border-purple-500/20 relative overflow-hidden group cursor-pointer">
-            <div class="relative z-10">
-                <span class="bg-purple-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-lg shadow-purple-500/20">✨ New Arrival</span>
-                <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter mb-2">Genshin Crystals</h3>
-                <p class="text-purple-400 font-bold text-sm">แพ็กเกจพรแห่งดวงจันทร์เข้าแล้ว ช้อปเลย!</p>
-            </div>
-            <div class="absolute -right-10 -bottom-10 opacity-20 group-hover:scale-110 transition-transform duration-500">
-                <span class="text-9xl">💎</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="flex flex-wrap justify-center gap-3 sm:gap-6">
-        <a href="{% url 'home' %}" class="px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 transition-all font-black uppercase text-[10px] tracking-widest {% if not request.GET.cat %}border-blue-500 text-white bg-blue-600/20 shadow-lg shadow-blue-600/20{% endif %}">
-            ALL GAMES
-        </a>
-        <a href="?cat=PC FPS" class="px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 transition-all font-black uppercase text-[10px] tracking-widest {% if request.GET.cat == 'PC FPS' %}border-blue-500 text-white bg-blue-600/20 shadow-lg shadow-blue-600/20{% endif %}">
-            🖥️ PC GAMES
-        </a>
-        <a href="?cat=Mobile MOBA" class="px-8 py-3 rounded-2xl border border-white/5 bg-white/5 hover:bg-blue-600 transition-all font-black uppercase text-[10px] tracking-widest {% if request.GET.cat == 'Mobile MOBA' %}border-blue-500 text-white bg-blue-600/20 shadow-lg shadow-blue-600/20{% endif %}">
-            📱 MOBILE GAMES
-        </a>
-    </div>
-
-    <div class="space-y-10">
-        <div class="flex items-center gap-4">
-            <h2 class="text-2xl font-black text-white italic uppercase tracking-tighter shrink-0">
-                🎮 CHOOSE <span class="text-blue-500">YOUR GAME</span>
-            </h2>
-            <div class="flex-grow h-[1px] bg-white/5"></div>
-        </div>
-        
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 sm:gap-8">
+        <div class="relative rounded-[1.75rem] sm:rounded-[2rem] border border-white/5 bg-white/[0.02] px-3 sm:px-4 lg:px-5 py-4 sm:py-5 overflow-hidden" data-platform-slider>
+            <div class="pointer-events-none absolute inset-y-0 left-0 hidden md:block w-12 sm:w-20 bg-gradient-to-r from-[#040811] via-[#040811]/85 to-transparent z-10"></div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 hidden md:block w-12 sm:w-20 bg-gradient-to-l from-[#040811] via-[#040811]/85 to-transparent z-10"></div>
+            <div class="platform-slider-viewport overflow-x-auto md:overflow-hidden custom-scrollbar">
+                <div class="platform-slider-track flex min-w-max md:min-w-0 items-stretch gap-3 sm:gap-5 will-change-transform" data-platform-games>
             {% for game in games %}
-            <a href="{% url 'game_detail' game.slug %}" class="group relative aspect-square rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl hover:border-blue-500/50 transition-all duration-500 hover:-translate-y-3">
+            {% if game.is_available_for_sale %}
+            <a
+                href="{% url 'game_detail' game.slug %}"
+                data-platform-item="{{ game.platform.name|default:''|lower }}"
+                class="platform-game-card group relative w-[138px] sm:w-[185px] lg:w-[210px] aspect-[4/5] rounded-[1.5rem] sm:rounded-[1.75rem] overflow-hidden border border-white/5 shadow-2xl hover:border-blue-500/40 transition-all duration-500 hover:-translate-y-2 block bg-[#0A0F16] shrink-0"
+            >
+            {% else %}
+            <div
+                data-platform-item="{{ game.platform.name|default:''|lower }}"
+                class="platform-game-card group relative w-[138px] sm:w-[185px] lg:w-[210px] aspect-[4/5] rounded-[1.5rem] sm:rounded-[1.75rem] overflow-hidden border border-white/5 shadow-2xl transition-all duration-500 block bg-[#0A0F16] shrink-0 opacity-60 cursor-not-allowed"
+            >
+            {% endif %}
                 {% if game.logo %}
-                    <img src="{{ game.logo.url }}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-1000 opacity-70 group-hover:opacity-100">
+                                    <img src="{{ game.logo.url }}" loading="lazy" decoding="async" width="640" height="640" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-1000 opacity-65 group-hover:opacity-100 filter group-hover:brightness-110" alt="{{ game.name }}">
                 {% else %}
                     <div class="absolute inset-0 bg-[#0B0F19]"></div>
                 {% endif %}
-                
+
                 <div class="absolute inset-0 bg-gradient-to-t from-[#030508] via-[#0A0F16]/40 to-transparent"></div>
-                
-                <div class="absolute bottom-6 left-6 right-6 z-10">
-                    <h3 class="text-xl font-black text-white italic leading-tight uppercase tracking-tighter truncate">{{ game.name }}</h3>
-                    <p class="text-[8px] font-bold text-blue-500 uppercase tracking-widest mt-1 opacity-0 group-hover:opacity-100 transition-opacity">Select Store →</p>
+                <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/25 to-transparent"></div>
+
+                <div class="absolute bottom-5 left-4 right-4 z-10 flex flex-col items-center text-center">
+                    <h3 class="text-[14px] sm:text-base font-black text-white italic leading-tight uppercase tracking-tight w-full line-clamp-2">
+                        {{ game.name }}
+                    </h3>
+                    <p class="text-[9px] font-bold uppercase tracking-[0.16em] mt-2 transition-all {% if game.is_available_for_sale %}text-blue-400 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0{% else %}text-amber-300 opacity-100{% endif %}">
+                        เลือกดูสินค้า →
+                    </p>
+                </div>
+            {% if game.is_available_for_sale %}
+            </a>
+            {% else %}
+            </div>
+            {% endif %}
+            {% empty %}
+            <p class="w-full text-center text-slate-600 py-10 font-bold uppercase italic tracking-[0.16em]">
+                ไม่พบเกมที่ตรงกับตัวกรอง...
+            </p>
+            {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="space-y-8 sm:space-y-10">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-black text-white italic uppercase tracking-tight">
+                    หมวด <span class="text-blue-500">แนะนำ</span>
+                </h2>
+                <p class="mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                    เข้าสู่หมวดที่คนเลือกซื้อบ่อยได้ทันที
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            <a href="{% url 'wallets:top_up' %}" class="group relative rounded-[1.75rem] border border-blue-500/10 bg-gradient-to-br from-blue-500/10 via-[#0A0F16] to-[#09111A] p-6 sm:p-7 overflow-hidden hover:border-blue-500/35 transition-all duration-500 hover:-translate-y-1.5">
+                <div class="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-blue-500/10 blur-2xl"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-black uppercase tracking-[0.16em] text-blue-400 mb-3">เติมเงิน</p>
+                    <h3 class="text-2xl font-black text-white uppercase tracking-tight mb-2">โซนเติมเงิน</h3>
+                    <p class="text-sm text-slate-300 leading-6">กดเข้าหน้าเติมเงินของเว็บได้ตรง ๆ จากตรงนี้เลย</p>
+                    <div class="mt-5 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-blue-300">
+                        ไปหน้าเติมเงิน
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </div>
                 </div>
             </a>
-            {% empty %}
-            <p class="col-span-full text-center text-slate-600 py-10 font-bold uppercase italic">No games matching your fleet...</p>
-            {% endfor %}
-        </div>
-    </div>
 
-    <div class="space-y-10">
-        <div class="flex items-center justify-between border-b border-white/5 pb-6">
-            <h2 class="text-2xl font-black text-white italic uppercase tracking-tighter">
-                🛍️ HOT <span class="text-blue-500">ITEMS</span>
-            </h2>
-            <a href="{% url 'product_list' %}" class="text-[10px] font-black text-slate-500 hover:text-white uppercase tracking-widest transition">
-                View All Items →
+            <a href="{% url 'product_list' %}?platform=PC" class="group relative rounded-[1.75rem] border border-cyan-500/10 bg-gradient-to-br from-cyan-500/10 via-[#0A0F16] to-[#09111A] p-6 sm:p-7 overflow-hidden hover:border-cyan-400/35 transition-all duration-500 hover:-translate-y-1.5">
+                <div class="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-cyan-500/10 blur-2xl"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-300 mb-3">PC</p>
+                    <h3 class="text-2xl font-black text-white uppercase tracking-tight mb-2">หมวดเกม PC</h3>
+                    <p class="text-sm text-slate-300 leading-6">รวมไอเท็ม, บันเดิล และคีย์เกมสำหรับสายพีซีโดยเฉพาะ</p>
+                    <div class="mt-5 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-cyan-300">
+                        ดูสินค้า
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{% url 'product_list' %}?platform=Mobile" class="group relative rounded-[1.75rem] border border-fuchsia-500/10 bg-gradient-to-br from-fuchsia-500/10 via-[#0A0F16] to-[#09111A] p-6 sm:p-7 overflow-hidden hover:border-fuchsia-400/35 transition-all duration-500 hover:-translate-y-1.5">
+                <div class="absolute -right-6 -top-6 w-28 h-28 rounded-full bg-fuchsia-500/10 blur-2xl"></div>
+                <div class="relative z-10">
+                    <p class="text-[10px] font-black uppercase tracking-[0.16em] text-fuchsia-300 mb-3">Mobile</p>
+                    <h3 class="text-2xl font-black text-white uppercase tracking-tight mb-2">หมวดเกมมือถือ</h3>
+                    <p class="text-sm text-slate-300 leading-6">แพ็กเกจยอดนิยมสำหรับผู้เล่นมือถือที่อยากช้อปให้จบในหน้าเดียว</p>
+                    <div class="mt-5 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-fuchsia-300">
+                        ดูสินค้า
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="space-y-8 sm:space-y-10">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 border-b border-white/5 pb-5">
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-black text-white italic uppercase tracking-tight">
+                    ไอเท็ม <span class="text-blue-500">แนะนำ</span>
+                </h2>
+                <p class="mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                    สินค้าเด่นจากหน้าร้านตอนนี้
+                </p>
+            </div>
+
+            <a href="{% url 'product_list' %}" class="text-[10px] sm:text-[11px] font-black text-slate-500 hover:text-blue-400 uppercase tracking-[0.16em] transition-colors flex items-center gap-1.5">
+                ดูทั้งหมด
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"></path>
+                </svg>
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {% for product in products|slice:":4" %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-5 sm:gap-6">
+            {% for product in products|slice:":6" %}
                 {% include 'includes/product_card.html' %}
             {% empty %}
-            <div class="col-span-full py-20 text-center bg-white/[0.02] rounded-[3rem] border border-dashed border-white/10">
-                <p class="text-slate-600 font-bold uppercase tracking-[0.3em] text-sm">
-                    ไม่พบไอเท็มฮอตในคลังแสง...
+            <div class="col-span-full py-20 text-center bg-white/[0.02] rounded-[2rem] border border-dashed border-white/10">
+                <p class="text-slate-600 font-bold uppercase tracking-[0.24em] text-sm">
+                    ไม่พบไอเท็มแนะนำในตอนนี้...
                 </p>
             </div>
             {% endfor %}
         </div>
-    </div>
+    </section>
+
+    <section class="space-y-8 sm:space-y-10">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-black text-white italic uppercase tracking-tight">
+                    Showcase <span class="text-blue-500">Selection</span>
+                </h2>
+                <p class="mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+                    โซนนำเสนอสินค้าแบบกดเลื่อนดูได้หลายชุด
+                </p>
+            </div>
+        </div>
+
+        <div class="space-y-8">
+            <div class="product-showcase" data-showcase-slider>
+                <div class="flex items-center justify-between gap-3 mb-5">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.16em] text-emerald-400 mb-2">Featured Picks</p>
+                        <h3 class="text-xl sm:text-2xl font-black text-white italic tracking-tight">สินค้าแนะนำของร้าน</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" class="showcase-nav" data-showcase-prev aria-label="Previous featured products">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="showcase-nav" data-showcase-next aria-label="Next featured products">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="showcase-viewport custom-scrollbar" data-showcase-viewport>
+                    <div class="showcase-track" data-showcase-track>
+                        {% for product in featured_products %}
+                        <div class="showcase-card">
+                            {% include 'includes/product_card.html' %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-showcase" data-showcase-slider>
+                <div class="flex items-center justify-between gap-3 mb-5">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.16em] text-cyan-300 mb-2">Today Update</p>
+                        <h3 class="text-xl sm:text-2xl font-black text-white italic tracking-tight">มาใหม่ประจำวัน</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" class="showcase-nav" data-showcase-prev aria-label="Previous daily products">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="showcase-nav" data-showcase-next aria-label="Next daily products">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="showcase-viewport custom-scrollbar" data-showcase-viewport>
+                    <div class="showcase-track" data-showcase-track>
+                        {% for product in daily_products %}
+                        <div class="showcase-card">
+                            {% include 'includes/product_card.html' %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-showcase" data-showcase-slider>
+                <div class="flex items-center justify-between gap-3 mb-5">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.16em] text-amber-300 mb-2">Value Zone</p>
+                        <h3 class="text-xl sm:text-2xl font-black text-white italic tracking-tight">คุ้มราคาวันนี้</h3>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" class="showcase-nav" data-showcase-prev aria-label="Previous value products">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button type="button" class="showcase-nav" data-showcase-next aria-label="Next value products">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="showcase-viewport custom-scrollbar" data-showcase-viewport>
+                    <div class="showcase-track" data-showcase-track>
+                        {% for product in value_products %}
+                        <div class="showcase-card">
+                            {% include 'includes/product_card.html' %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 bg-gradient-to-r from-[#0A0F16] via-[#09121D] to-[#0A0F16] p-7 sm:p-10">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-40 bg-blue-500/10 blur-[100px] rounded-full"></div>
+        <div class="absolute bottom-0 right-0 w-56 h-56 bg-cyan-500/10 blur-[100px] rounded-full"></div>
+
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 items-center">
+            <div>
+                <p class="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.16em] text-blue-400 mb-3">
+                    กำลังมองหาอะไรอยู่?
+                </p>
+                <h3 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight leading-tight">
+                    พร้อมหาไอเท็มชิ้นต่อไป
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">ให้คุณแล้ว</span>
+                </h3>
+                <p class="mt-4 max-w-2xl text-sm sm:text-base text-slate-300 leading-7">
+                    ไปต่อที่หน้ารวมสินค้าเพื่อเลือกดูหมวด, แพลตฟอร์ม, เกม หรือไอเท็มที่กำลังมาแรงในคลังตอนนี้
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <a href="{% url 'product_list' %}" class="inline-flex items-center gap-2 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.16em] transition-all hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(37,99,235,0.35)]">
+                    เปิดร้านค้า
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+                <a href="#games" class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-white px-6 py-3.5 text-[11px] font-black uppercase tracking-[0.16em] transition-all hover:-translate-y-1">
+                    ดูเกมทั้งหมด
+                </a>
+            </div>
+        </div>
+    </section>
 
 </div>
+
+<style>
+.hero-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(7, 16, 25, 0.78);
+    color: #fff;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+}
+
+.hero-nav:hover {
+    background: rgba(37, 99, 235, 0.28);
+    border-color: rgba(96, 165, 250, 0.45);
+}
+
+.hero-nav-prev {
+    left: 1rem;
+}
+
+.hero-nav-next {
+    right: 1rem;
+}
+
+.platform-slider-track {
+    min-width: max-content;
+}
+
+.platform-slider-track.is-paused {
+    cursor: grab;
+}
+
+.platform-slider-track.is-paused:active {
+    cursor: grabbing;
+}
+
+.product-showcase {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.75rem;
+    background: linear-gradient(180deg, rgba(10, 15, 22, 0.92), rgba(7, 11, 18, 0.88));
+    padding: 1.25rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+.showcase-viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+}
+
+.showcase-track {
+    display: flex;
+    gap: 1.5rem;
+    min-width: max-content;
+}
+
+.showcase-card {
+    width: min(360px, calc(100vw - 3.5rem));
+    flex: 0 0 auto;
+}
+
+.showcase-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(7, 16, 25, 0.78);
+    color: #fff;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+}
+
+.showcase-nav:hover {
+    background: rgba(37, 99, 235, 0.28);
+    border-color: rgba(96, 165, 250, 0.45);
+    color: #bfdbfe;
+}
+
+@media (max-width: 640px) {
+    .hero-nav {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .hero-nav-prev {
+        left: 0.75rem;
+    }
+
+    .hero-nav-next {
+        right: 0.75rem;
+    }
+
+    .platform-game-card {
+        width: 148px;
+    }
+
+    .product-showcase {
+        padding: 1rem;
+        border-radius: 1.5rem;
+    }
+
+    .showcase-track {
+        gap: 1rem;
+    }
+
+    .showcase-card {
+        width: calc(100vw - 2.75rem);
+    }
+}
+
+@media (min-width: 768px) {
+    .showcase-card {
+        width: 270px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .showcase-card {
+        width: calc((100vw - 11rem) / 6);
+        max-width: 248px;
+        min-width: 210px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.querySelector('[data-slider]');
+    if (!slider) return;
+
+    const track = slider.querySelector('.hero-slides');
+    const slides = Array.from(slider.querySelectorAll('.hero-slide'));
+    const prevButton = slider.querySelector('[data-slider-prev]');
+    const nextButton = slider.querySelector('[data-slider-next]');
+    let activeIndex = 0;
+    let autoPlay = null;
+
+    function render(index) {
+        activeIndex = (index + slides.length) % slides.length;
+        track.style.transform = `translateX(-${activeIndex * 100}%)`;
+    }
+
+    function nextSlide() {
+        render(activeIndex + 1);
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlay = window.setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlay) {
+            window.clearInterval(autoPlay);
+            autoPlay = null;
+        }
+    }
+
+    if (prevButton) {
+        prevButton.addEventListener('click', function () {
+            render(activeIndex - 1);
+            startAutoPlay();
+        });
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener('click', function () {
+            render(activeIndex + 1);
+            startAutoPlay();
+        });
+    }
+
+    slider.addEventListener('mouseenter', stopAutoPlay);
+    slider.addEventListener('mouseleave', startAutoPlay);
+
+    render(0);
+    startAutoPlay();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const filterRoot = document.querySelector('[data-platform-filter]');
+    if (!filterRoot) return;
+
+    const buttons = Array.from(filterRoot.querySelectorAll('[data-platform-button]'));
+    const sliderRoot = document.querySelector('[data-platform-slider]');
+    const track = sliderRoot ? sliderRoot.querySelector('[data-platform-games]') : null;
+    const cards = track ? Array.from(track.querySelectorAll('[data-platform-item]')) : [];
+    const countLabel = document.querySelector('[data-platform-count]');
+    let clonedCards = [];
+    let rafId = null;
+    let offset = 0;
+    let loopWidth = 0;
+    let isPaused = false;
+
+    if (!buttons.length || !cards.length || !track) return;
+
+    function isVisibleForPlatform(cardPlatform, activePlatform) {
+        if (activePlatform === 'all') return true;
+        return cardPlatform === activePlatform;
+    }
+
+    function clearClones() {
+        clonedCards.forEach(function (card) {
+            card.remove();
+        });
+        clonedCards = [];
+    }
+
+    function stopSlider() {
+        if (rafId) {
+            window.cancelAnimationFrame(rafId);
+            rafId = null;
+        }
+    }
+
+    function animateSlider() {
+        if (isPaused || loopWidth <= 0) {
+            rafId = window.requestAnimationFrame(animateSlider);
+            return;
+        }
+
+        offset -= window.innerWidth < 640 ? 0.35 : 0.5;
+
+        if (Math.abs(offset) >= loopWidth) {
+            offset = 0;
+        }
+
+        track.style.transform = 'translate3d(' + offset + 'px, 0, 0)';
+        rafId = window.requestAnimationFrame(animateSlider);
+    }
+
+    function rebuildSlider() {
+        stopSlider();
+        clearClones();
+        offset = 0;
+        track.style.transform = 'translate3d(0, 0, 0)';
+
+        const visibleCards = cards.filter(function (card) {
+            return !card.classList.contains('hidden');
+        });
+
+        if (!visibleCards.length) {
+            return;
+        }
+
+        const cardWidth = visibleCards[0].offsetWidth || 180;
+        const viewportWidth = sliderRoot.clientWidth || track.parentElement.clientWidth || 0;
+        const gapWidth = window.innerWidth < 640 ? 16 : 20;
+        const cardsNeeded = viewportWidth > 0 ? Math.max(visibleCards.length, Math.ceil((viewportWidth * 2) / (cardWidth + gapWidth))) : visibleCards.length;
+
+        while (clonedCards.length < cardsNeeded) {
+            visibleCards.forEach(function (card) {
+                if (clonedCards.length >= cardsNeeded) return;
+                const clone = card.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                clone.dataset.clone = 'true';
+                track.appendChild(clone);
+                clonedCards.push(clone);
+            });
+        }
+
+        loopWidth = visibleCards.reduce(function (total, card) {
+            return total + card.offsetWidth;
+        }, 0) + (Math.max(visibleCards.length - 1, 0) * gapWidth);
+
+        animateSlider();
+    }
+
+    function setActiveButton(activePlatform) {
+        buttons.forEach(function (button) {
+            const isActive = button.dataset.platformButton === activePlatform;
+            button.classList.toggle('border-blue-500', isActive);
+            button.classList.toggle('text-white', isActive);
+            button.classList.toggle('bg-blue-600', isActive);
+            button.classList.toggle('shadow-[0_0_20px_rgba(59,130,246,0.35)]', isActive);
+            button.classList.toggle('text-slate-400', !isActive);
+        });
+    }
+
+    function renderPlatform(activePlatform) {
+        let visibleCount = 0;
+
+        cards.forEach(function (card) {
+            const cardPlatform = (card.dataset.platformItem || '').trim().toLowerCase();
+            const isVisible = isVisibleForPlatform(cardPlatform, activePlatform);
+
+            card.classList.toggle('hidden', !isVisible);
+            if (isVisible) visibleCount += 1;
+        });
+
+        setActiveButton(activePlatform);
+
+        if (countLabel) {
+            countLabel.textContent = 'มีทั้งหมด ' + visibleCount + ' หมวดเกม';
+        }
+        window.setTimeout(rebuildSlider, 60);
+    }
+
+    buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            renderPlatform(button.dataset.platformButton);
+        });
+    });
+
+    sliderRoot.addEventListener('mouseenter', function () {
+        isPaused = true;
+        track.classList.add('is-paused');
+    });
+
+    sliderRoot.addEventListener('mouseleave', function () {
+        isPaused = false;
+        track.classList.remove('is-paused');
+    });
+
+    window.addEventListener('resize', function () {
+        window.clearTimeout(window.__papayaHomeSliderResizeTimer);
+        window.__papayaHomeSliderResizeTimer = window.setTimeout(rebuildSlider, 120);
+    });
+
+    renderPlatform('all');
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const showcaseSliders = document.querySelectorAll('[data-showcase-slider]');
+
+    showcaseSliders.forEach(function (slider) {
+        const viewport = slider.querySelector('[data-showcase-viewport]');
+        const prevButton = slider.querySelector('[data-showcase-prev]');
+        const nextButton = slider.querySelector('[data-showcase-next]');
+        const firstCard = slider.querySelector('.showcase-card');
+
+        if (!viewport || !firstCard) {
+            return;
+        }
+
+        function getStep() {
+            const styles = window.getComputedStyle(slider.querySelector('[data-showcase-track]'));
+            const gap = parseFloat(styles.columnGap || styles.gap || 24) || 24;
+            return firstCard.getBoundingClientRect().width + gap;
+        }
+
+        if (prevButton) {
+            prevButton.addEventListener('click', function () {
+                viewport.scrollBy({ left: -getStep(), behavior: 'smooth' });
+            });
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener('click', function () {
+                viewport.scrollBy({ left: getStep(), behavior: 'smooth' });
+            });
+        }
+    });
+});
+</script>
 
 {% endblock %}

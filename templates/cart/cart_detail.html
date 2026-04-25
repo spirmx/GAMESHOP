@@ -1,81 +1,175 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-[1200px] mx-auto py-10 px-4">
-    <div class="mb-10">
-        <h1 class="text-4xl font-black text-white italic uppercase tracking-tighter">Your <span class="text-indigo-500">Cargo</span></h1>
+<div class="max-w-[1300px] mx-auto py-6 sm:py-10 px-4 mb-16 sm:mb-20 relative">
+    <div class="absolute top-0 left-0 w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full pointer-events-none z-0"></div>
+
+    <div class="mb-6 relative z-10">
+        <button
+            type="button"
+            onclick="goBackWithFallback('{% url 'home' %}')"
+            class="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-all duration-300 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.16em] bg-white/5 hover:bg-white/10 hover:border-white/20 px-4 sm:px-5 py-2.5 rounded-xl border border-white/5 w-fit hover:-translate-x-1"
+        >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            กลับหน้าก่อนหน้า
+        </button>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="mb-8 sm:mb-12 border-l-4 border-indigo-500 pl-4 sm:pl-6 relative z-10">
+        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black text-white italic tracking-tighter drop-shadow-lg leading-none">
+            ตะกร้า<span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 px-4 to-cyan-300">สินค้า</span>
+        </h1>
+        <p class="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px] mt-3 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_10px_#6366f1]"></span>
+            ตรวจสอบรายการก่อนชำระเงิน
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
         <div class="lg:col-span-8">
-            <div class="admin-card !p-0 overflow-hidden border border-white/5">
+            <div class="bg-[#070A10]/90 backdrop-blur-2xl border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
                 <div class="divide-y divide-white/5">
                     {% for item in cart.items.all %}
-                    <div class="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-white/[0.02] transition"
-                         x-data="{ 
+                    <div
+                        class="p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 group hover:bg-white/[0.02] transition-colors relative"
+                        x-data="{
                             qty: {{ item.quantity }},
                             updateItem(url) {
                                 fetch(url, {
                                     method: 'POST',
-                                    headers: { 'X-CSRFToken': '{{ csrf_token }}', 'X-Requested-With': 'XMLHttpRequest' }
+                                    headers: {
+                                        'X-CSRFToken': '{{ csrf_token }}',
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    }
                                 })
                                 .then(res => res.json())
                                 .then(data => {
-                                    if(data.status === 'success') {
+                                    if (data.status === 'success') {
                                         this.qty = data.quantity;
-                                        document.getElementById('subtotal-{{ item.id }}').innerText = '฿' + data.item_total.toLocaleString(undefined, {minimumFractionDigits: 2});
-                                        document.getElementById('grand-total').innerText = '฿' + data.cart_total.toLocaleString(undefined, {minimumFractionDigits: 2});
-                                    } else if(data.status === 'removed') {
-                                        location.reload(); 
+                                        document.getElementById('subtotal-{{ item.id }}').innerText = '฿' + data.item_total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                                        document.getElementById('grand-total').innerText = '฿' + data.cart_total.toLocaleString(undefined, { minimumFractionDigits: 2 });
+                                    } else if (data.status === 'removed') {
+                                        location.reload();
                                     }
-                                })
+                                });
                             }
-                         }">
-                        
-                        <div class="flex items-center gap-5 w-full sm:w-auto">
-                            <div class="w-20 h-20 bg-[#05070A] rounded-2xl flex items-center justify-center p-2 border border-white/5 shrink-0">
-                                {% if item.product.image %}<img src="{{ item.product.image.url }}" class="w-full h-full object-contain">{% endif %}
+                        }"
+                    >
+                        <div class="absolute left-0 top-0 w-1 h-full bg-transparent group-hover:bg-indigo-500 transition-colors"></div>
+
+                        <div class="flex items-center gap-6 w-full sm:w-auto">
+                            <div class="w-24 h-24 bg-[#030508] rounded-2xl flex items-center justify-center p-3 border border-white/10 shrink-0 shadow-inner group-hover:border-indigo-500/30 transition-colors">
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" loading="lazy" decoding="async" width="240" height="240" class="w-full h-full object-contain drop-shadow-md" alt="{{ item.product.title }}">
+                                {% endif %}
                             </div>
-                            
-                            <div class="flex-grow">
-                                <h3 class="text-white font-bold text-lg mb-1">{{ item.product.title }}</h3>
-                                <div class="flex items-center gap-3 mb-3">
-                                    <span class="text-[10px] text-indigo-400 font-black uppercase tracking-widest">{{ item.product.category.name|default:"DIGITAL" }}</span>
-                                </div>
-                                
-                                <div class="flex items-center gap-4">
-                                    <div class="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/5">
-                                        <button @click="updateItem('{% url 'cart:decrease_quantity' item.product.id %}')" type="button" class="qty-btn w-7 h-7 rounded-lg font-black hover:bg-red-500 hover:text-white transition">-</button>
-                                        <span x-text="qty" class="w-8 text-center text-sm font-black text-white"></span>
-                                        <button @click="updateItem('{% url 'cart:add_to_cart' item.product.id %}')" type="button" class="qty-btn w-7 h-7 rounded-lg font-black hover:bg-green-500 hover:text-white transition">+</button>
-                                    </div>
-                                    <form action="{% url 'cart:remove_from_cart' item.product.id %}" method="POST" class="m-0">
-                                        {% csrf_token %}<button type="submit" class="p-2 text-slate-500 hover:text-red-500 rounded-lg transition"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                                    </form>
-                                </div>
+
+                            <div class="flex-grow space-y-1.5">
+                                <span class="text-[9px] text-indigo-400 font-black uppercase tracking-[0.2em] bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
+                                    {{ item.product.category.name|default:"สินค้าเกมดิจิทัล" }}
+                                </span>
+                                <h3 class="text-white font-bold text-lg uppercase italic leading-tight">{{ item.product.title }}</h3>
+                                <span class="inline-flex w-fit rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.16em] text-cyan-300">
+                                    {{ item.product.get_fulfillment_type_display }}
+                                </span>
+                                <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">
+                                    ราคาต่อชิ้น: ฿{{ item.product.price|floatformat:2 }}
+                                </p>
                             </div>
                         </div>
 
-                        <div class="text-right">
-                            <p id="subtotal-{{ item.id }}" class="text-xl cyber-num text-white">฿{{ item.subtotal|floatformat:2 }}</p>
+                        <div class="flex items-center justify-between w-full sm:w-auto gap-8 border-t sm:border-0 border-white/5 pt-6 sm:pt-0">
+                            <div class="flex items-center gap-1 bg-[#030508] p-1.5 rounded-xl border border-white/10 shadow-inner">
+                                <button @click="updateItem('{% url 'cart:decrease_quantity' item.product.id %}')" type="button" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-red-500/20 hover:text-red-400 text-slate-300 font-black transition-colors flex items-center justify-center border border-transparent hover:border-red-500/30">-</button>
+                                <span x-text="qty" class="w-10 text-center text-sm font-black text-white"></span>
+                                {% if item.product.is_code_product %}
+                                <button @click="updateItem('{% url 'cart:add_to_cart' item.product.id %}')" type="button" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-green-500/20 hover:text-green-400 text-slate-300 font-black transition-colors flex items-center justify-center border border-transparent hover:border-green-500/30">+</button>
+                                {% else %}
+                                <button type="button" disabled class="w-8 h-8 rounded-lg bg-white/5 text-slate-600 font-black transition-colors flex items-center justify-center border border-white/5 cursor-not-allowed" title="แก้จำนวนจากหน้าสินค้า">+</button>
+                                {% endif %}
+                            </div>
+
+                            <div class="text-right min-w-[96px]">
+                                <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">ยอดรวมรายการ</p>
+                                <p id="subtotal-{{ item.id }}" class="text-xl font-black text-[#fbbf24] italic tracking-tighter drop-shadow-sm">฿{{ item.subtotal|floatformat:2 }}</p>
+                                <span class="text-[12px] text-blue-500 font-black uppercase">บาท</span>
+                            </div>
+
+                            <form action="{% url 'cart:remove_from_cart' item.product.id %}" method="POST" class="m-0">
+                                {% csrf_token %}
+                                <button type="submit" class="p-2.5 text-slate-600 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all border border-transparent hover:border-red-500/30 group/btn" title="นำออกจากตะกร้า">
+                                    <svg class="w-5 h-5 group-hover/btn:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </form>
                         </div>
                     </div>
                     {% empty %}
-                    <div class="py-20 text-center"><p class="text-slate-500 font-black">EMPTY CARGO</p></div>
+                    <div class="py-32 text-center flex flex-col items-center justify-center space-y-4">
+                        <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center border border-white/10">
+                            <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                        </div>
+                        <p class="text-slate-500 font-black uppercase tracking-[0.4em] text-xl">ตะกร้าของคุณยังว่างอยู่</p>
+                        <a href="/" class="text-indigo-400 text-[13px] font-bold uppercase tracking-widest hover:text-indigo-300 border-b border-indigo-500/50 pb-0.5 mt-2">
+                            เลือกสินค้า
+                        </a>
+                    </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
 
         <div class="lg:col-span-4">
-            <div class="summary-card p-8 sticky top-28 space-y-6 bg-[#0A0F16] border border-white/5 rounded-3xl">
-                <h2 class="text-lg font-black text-white italic uppercase tracking-widest border-b border-white/5 pb-4">Summary</h2>
-                <div class="flex flex-col gap-2">
-                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Grand Total</span>
-                    <span id="grand-total" class="text-4xl cyber-num text-white">฿{{ cart.total_price|floatformat:2 }}</span>
+            <div class="bg-[#070A10]/90 backdrop-blur-2xl border border-indigo-500/20 p-5 sm:p-8 rounded-[1.75rem] sm:rounded-[2rem] lg:sticky lg:top-28 shadow-[0_30px_60px_rgba(0,0,0,0.5)] overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 blur-3xl rounded-full pointer-events-none"></div>
+
+                <h2 class="text-sm font-black text-white italic uppercase tracking-widest border-b border-white/5 pb-6 mb-6 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    สรุปรายการสั่งซื้อ
+                </h2>
+
+                <div class="bg-black/50 border border-white/5 rounded-2xl p-6 mb-8 shadow-inner">
+                    <span class="block text-[15px] font-black text-slate-500 uppercase tracking-widest mb-2">ยอดชำระทั้งหมด</span>
+                    <span id="grand-total" class="block text-4xl sm:text-3xl font-black text-white italic tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">฿{{ cart.total_price|floatformat:2 }}</span>
                 </div>
-                <a href="{% url 'orders:checkout' %}" class="btn-neon w-full mt-4 text-center block !py-4">Proceed to Checkout</a>
+
+                {% if cart.items.count > 0 %}
+                <a href="{% url 'orders:checkout' %}" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-black py-5 rounded-2xl transition-all shadow-[0_0_20px_rgba(99,102,241,0.4)] hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] uppercase tracking-[0.2em] text-[10px] hover:-translate-y-1 flex items-center justify-center gap-2">
+                    ไปชำระเงิน
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+                {% else %}
+                <button disabled class="w-full bg-white/5 text-slate-600 font-black py-5 rounded-2xl border border-white/5 uppercase tracking-[0.2em] text-[13px] cursor-not-allowed">
+                    ยังไม่มีสินค้าในตะกร้า
+                </button>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<script>
+function goBackWithFallback(fallbackUrl) {
+    if (document.referrer) {
+        try {
+            const referrerUrl = new URL(document.referrer);
+            if (referrerUrl.origin === window.location.origin) {
+                window.history.back();
+                return;
+            }
+        } catch (error) {
+        }
+    }
+
+    window.location.href = fallbackUrl;
+}
+</script>
 {% endblock %}

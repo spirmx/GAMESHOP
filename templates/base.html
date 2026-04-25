@@ -3,41 +3,170 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>PAPAYA GAME SHOP | ยานแม่ของเหล่าเกมเมอร์</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PAPAYA GAME SHOP{% endblock %}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-    
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .message-enter {
+            animation: messageSlideIn .35s ease-out;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    {% block extra_head %}{% endblock %}
 </head>
 
-<body class="stars-moving text-slate-200 min-h-screen flex flex-col antialiased">
-    
-    {% include 'includes/navbar.html' %}
+<body class="stars-moving min-h-screen overflow-x-hidden text-slate-200 flex flex-col">
+    <div class="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div class="absolute -top-24 left-1/2 h-72 w-[72%] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[140px]"></div>
+        <div class="absolute top-[22%] -left-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-[130px]"></div>
+        <div class="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-indigo-500/10 blur-[150px]"></div>
+    </div>
 
-    <main class="flex-grow w-[95%] max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-12">
-        
-        {% if messages %}
-            <div class="space-y-4 mb-8">
-                {% for message in messages %}
-                    <div class="alert-box {{ message.tags }} p-4 rounded-2xl text-white font-black shadow-2xl animate-fade-in flex items-center justify-between border border-white/10">
-                        <span class="text-sm sm:text-base">{{ message }}</span>
-                        <button class="opacity-50 hover:opacity-100" onclick="this.parentElement.remove()">✕</button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    <div class="relative z-10 flex min-h-screen flex-col">
+        {% include 'includes/navbar.html' %}
 
-        {% block content %}{% endblock %}
-        
-    </main>
+        <main class="relative mx-auto w-full max-w-[1680px] flex-grow px-4 py-8 sm:px-5 sm:py-10 lg:px-6">
+            {% if messages %}
+                <div class="relative z-40 mb-6 space-y-3">
+                    {% for message in messages %}
+                        <div
+                            x-data="{ show: true }"
+                            x-show="show"
+                            x-transition.opacity.duration.300ms
+                            x-init="setTimeout(() => show = false, 3500)"
+                            class="message-enter flex items-start gap-3 rounded-2xl border px-4 py-4 shadow-lg backdrop-blur-md
+                            {% if message.tags == 'error' %}
+                                border-red-500/40 bg-red-600/15 text-red-300
+                            {% elif message.tags == 'success' %}
+                                border-green-500/40 bg-green-600/15 text-green-300
+                            {% else %}
+                                border-blue-500/40 bg-blue-600/15 text-blue-300
+                            {% endif %}"
+                        >
+                            <span class="mt-0.5 shrink-0">
+                                {% if message.tags == 'error' %}
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                {% elif message.tags == 'success' %}
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                {% else %}
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                {% endif %}
+                            </span>
 
-    {% include 'includes/footer.html' %}
+                            <div class="flex-1 pr-2 text-sm font-bold leading-6 sm:text-[15px]">
+                                {{ message }}
+                            </div>
 
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/api.js' %}"></script>
+                            <button
+                                type="button"
+                                @click="show = false"
+                                class="shrink-0 text-current/70 transition hover:text-current"
+                                aria-label="ปิดข้อความแจ้งเตือน"
+                            >
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        {% include 'includes/footer.html' %}
+    </div>
+
+    <script>
+        (function () {
+            const canInteract = function (target) {
+                return Boolean(target && target.closest("input, textarea, select, [contenteditable='true']"));
+            };
+
+            const showWarning = function () {
+                if (window.__papayaDevtoolsWarned) {
+                    return;
+                }
+
+                window.__papayaDevtoolsWarned = true;
+                console.clear();
+                console.log("%cPAPAYA GAME SHOP", "color:#38bdf8;font-size:22px;font-weight:900;");
+                console.log("%cระบบนี้มีการป้องกันฝั่งหน้าเว็บในระดับเบื้องต้น", "color:#f8fafc;font-size:13px;font-weight:700;");
+                console.log("%cความปลอดภัยจริงควรอยู่ที่ฝั่งเซิร์ฟเวอร์ สิทธิ์ผู้ใช้ และการตรวจสอบข้อมูล", "color:#94a3b8;font-size:12px;");
+            };
+
+            document.addEventListener("contextmenu", function (event) {
+                if (canInteract(event.target)) {
+                    return;
+                }
+
+                event.preventDefault();
+            });
+
+            document.addEventListener("keydown", function (event) {
+                const key = event.key ? event.key.toLowerCase() : "";
+                const blocked =
+                    key === "f12" ||
+                    (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
+                    (event.ctrlKey && key === "u");
+
+                if (!blocked || canInteract(event.target)) {
+                    return;
+                }
+
+                event.preventDefault();
+                showWarning();
+            });
+
+            window.setInterval(function () {
+                const widthGap = window.outerWidth - window.innerWidth;
+                const heightGap = window.outerHeight - window.innerHeight;
+
+                if (widthGap > 220 || heightGap > 220) {
+                    showWarning();
+                }
+            }, 1500);
+        })();
+    </script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

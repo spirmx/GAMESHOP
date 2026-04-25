@@ -1,102 +1,193 @@
 {% extends 'base.html' %}
-{% load static %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/receipt_style.css' %}">
-{% endblock %}
-
 {% block content %}
-<div class="receipt-container">
-    
-    <div class="mission-header">
+<div class="max-w-[1000px] mx-auto py-12 px-4 mb-20 relative" id="receipt-container">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-white/10 pb-6 no-print">
         <div>
-            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Authorization Success</p>
-            <h1 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none">
-                Mission <span class="text-green-500">Receipt</span>
+            <p class="text-[10px] font-black text-green-500 uppercase tracking-widest mb-2 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]"></span>
+                สำเร็จ
+            </p>
+            <h1 class="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-lg">
+                ใบเสร็จ<span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-500 px-2">คำสั่งซื้อ</span>
             </h1>
         </div>
-        <div class="text-right">
-            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Transaction Date</p>
-            <p class="text-white font-bold text-sm uppercase">{{ order.created_at|date:"d F Y | H:i" }}</p>
+
+        <div class="text-left md:text-right bg-white/5 p-4 rounded-xl border border-white/10">
+            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">วันเวลาในการทำรายการ</p>
+            <p class="text-white font-bold text-xs uppercase">{{ order.created_at|date:"d M Y | H:i:s" }}</p>
         </div>
     </div>
 
-    <div class="order-card">
-        <div class="p-8 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
-            <h2 class="text-lg font-black text-white uppercase italic tracking-widest">Order Logs: #PY-{{ order.id }}</h2>
-            <span class="px-4 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full text-[10px] font-black text-green-500 uppercase tracking-widest">
-                Payment Success
+    <div class="bg-[#070A10]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.5)] print-wrapper">
+
+        <div class="p-6 sm:p-8 border-b border-white/5 bg-gradient-to-r from-green-900/20 to-transparent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h2 class="text-base sm:text-lg font-black text-white uppercase italic tracking-widest flex items-center gap-3">
+                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                รายการคำสั่งซื้อ: #PY-{{ order.id }}
+            </h2>
+
+            <span class="px-4 py-1.5 bg-green-500/10 border border-green-500/30 rounded-full text-[9px] font-black text-green-400 uppercase tracking-widest shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+                ชำระเงินสำเร็จ
             </span>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead class="table-head-row">
-                    <tr>
-                        <th class="p-6 w-1/4">Digital Equipment</th>
-                        <th class="p-6 text-center w-16">Qty</th>
-                        <th class="p-6">Activation Key List</th>
-                        <th class="p-6 text-right w-1/4">Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-white/5">
-                    {% for item in order.items.all %}
-                    <tr class="group hover:bg-white/[0.01] transition-colors" x-data="{ quantity: {{ item.quantity }} }">
-                        <td class="p-6 align-top">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-black rounded-lg border border-white/5 p-1.5">
-                                    {% if item.product.image %}<img src="{{ item.product.image.url }}" class="w-full h-full object-contain">{% endif %}
-                                </div>
-                                <div>
-                                    <p class="text-blue-500 text-[8px] font-black uppercase">{{ item.product.category.game.name|default:"Digital Store" }}</p>
-                                    <h4 class="text-white font-bold text-[13px] uppercase italic">{{ item.product.title }}</h4>
-                                </div>
+        <div class="p-6 sm:p-8 space-y-8">
+            {% for item in order.items.all %}
+            <div class="bg-black/40 border border-white/5 rounded-2xl p-6 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1 h-full bg-white/10 group-hover:bg-indigo-500 transition-colors"></div>
+
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pl-2">
+
+                    <div class="flex items-center gap-5 w-full lg:w-auto flex-grow min-w-0">
+                        <div class="w-16 h-16 bg-[#05080F] rounded-xl border border-white/10 p-2 shadow-inner shrink-0 flex items-center justify-center">
+                            {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" loading="lazy" decoding="async" width="240" height="240" class="w-full h-full object-contain filter drop-shadow-sm" alt="{{ item.product.title }}">
+                            {% else %}
+                                <span class="text-2xl opacity-50">📦</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="min-w-0">
+                            <p class="text-indigo-400 text-[9px] font-black uppercase tracking-[0.2em] mb-1 truncate">
+                                {% if item.product.game %}
+                                    {{ item.product.game.name }}
+                                {% elif item.product.category and item.product.category.game %}
+                                    {{ item.product.category.game.name }}
+                                {% elif item.product.category %}
+                                    {{ item.product.category.name }}
+                                {% else %}
+                                    สินค้าดิจิทัล
+                                {% endif %}
+                            </p>
+                            <h4 class="text-white font-bold text-base uppercase italic leading-tight line-clamp-2">{{ item.product.title }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between w-full lg:w-auto gap-8 sm:gap-12 shrink-0 border-t lg:border-0 border-white/5 pt-4 lg:pt-0">
+                        <div class="text-left lg:text-right">
+                            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-0.5">ราคาต่อชิ้น</p>
+                            <p class="text-xs font-black text-slate-300">
+                                ฿{{ item.price|default:item.product.price|floatformat:2 }}
+                                <span class="text-slate-500 ml-1">x {{ item.quantity }}</span>
+                            </p>
+                        </div>
+
+                        <div class="text-right w-24">
+                            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-0.5">ราคารวม</p>
+                            <p class="text-lg font-black text-[#fbbf24] italic drop-shadow-sm">฿{{ item.subtotal|default:item.price|floatformat:2 }}</p>
+                            <span class="text-[14px] text-slate-400 font-black uppercase tracking-widest">เครดิต</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 border-t border-white/5 pt-5 pl-2">
+                    <div class="mb-4 flex flex-wrap items-center gap-2">
+                        <span class="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-cyan-300">
+                            {{ item.get_fulfillment_type_display }}
+                        </span>
+                    </div>
+                    {% if item.fulfillment_type == 'code' %}
+                    <p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                        </svg>
+                        รหัสไอเทม / คีย์ที่ได้รับ
+                    </p>
+
+                    <div class="bg-white/[0.02] border border-white/5 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-3 px-2 border-b border-white/5 pb-2">
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest w-8">ลำดับ</span>
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest flex-grow text-center">รหัส / คีย์สินค้า</span>
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest w-16 text-right no-print">คัดลอก</span>
+                        </div>
+
+                        <div class="space-y-2">
+                            {% for key in item.delivered_code_list %}
+                            <div
+                                x-data="{ copied: false, key: '{{ key|escapejs }}' }"
+                                class="flex items-center justify-between bg-black/40 border border-white/5 hover:border-indigo-500/30 p-2 sm:p-2.5 rounded-lg transition-colors group/key"
+                            >
+                                <span class="text-xs text-slate-600 font-mono font-bold w-8 px-2">{{ forloop.counter|stringformat:"02d" }}.</span>
+
+                                <code class="text-indigo-300 font-mono text-xs sm:text-sm font-bold tracking-[0.2em] flex-grow text-center select-all" x-text="key"></code>
+
+                                <button
+                                    type="button"
+                                    @click="navigator.clipboard.writeText(key); copied = true; setTimeout(() => copied = false, 2000)"
+                                    class="w-16 relative z-10 text-[8px] sm:text-[9px] font-black uppercase tracking-widest py-1.5 rounded-md transition-all no-print"
+                                    :class="copied ? 'bg-green-500 text-white' : 'bg-white/5 text-slate-400 hover:bg-indigo-600 hover:text-white'"
+                                >
+                                    <span x-show="!copied">คัดลอก</span>
+                                    <span x-show="copied">คัดลอกแล้ว</span>
+                                </button>
                             </div>
-                        </td>
-                        <td class="p-6 text-center align-top">
-                            <span class="text-slate-400 font-black text-sm">{{ item.quantity }}</span>
-                        </td>
-                        <td class="p-6">
-                            <div class="key-grid">
-                                {% for i in "x"|rjust:item.quantity %}
-                                <div class="key-badge">
-                                    <code class="key-text">PPY-XXXXXXXX</code>
-                                    <button class="opacity-0 group-hover/key:opacity-100 text-[7px] text-slate-400 uppercase">Copy</button>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </td>
-                        <td class="p-6 text-right align-top">
-                            <p class="text-lg font-black text-white italic">฿{{ item.price|floatformat:2 }}</p>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-[10px] font-black text-cyan-300 uppercase tracking-widest mb-3">ข้อมูลบัญชีสำหรับเติมสินค้า</p>
+                    <div class="rounded-xl border border-cyan-500/15 bg-cyan-500/5 p-4 text-sm text-slate-200">
+                        <div class="space-y-2">
+                            <p><span class="font-bold text-white">{{ item.delivery_data.primary_label }}:</span> {{ item.delivery_data.primary_value }}</p>
+                            {% if item.delivery_data.secondary_value %}
+                            <p><span class="font-bold text-white">{{ item.delivery_data.secondary_label }}:</span> {{ item.delivery_data.secondary_value }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="mt-4 rounded-lg border border-amber-500/15 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
+                            ระบบกำลังดำเนินการเติมสินค้าให้กับคุณ โปรดรอภายใน 15-30 นาที หากเกินเวลาที่กำหนด กรุณาติดต่อฝ่ายบริการลูกค้าเพื่อขอความช่วยเหลือ
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+            {% endfor %}
         </div>
 
-        <div class="receipt-footer">
-            <div>
-                <p class="text-[9px] font-black text-slate-500 uppercase mb-1">Payment Method</p>
-                <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
-                    <p class="text-sm font-bold text-white uppercase italic">WALLET TRANSFER</p>
+        <div class="bg-[#030508] border-t border-white/5 p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-center gap-6 shadow-inner">
+            <div class="text-center sm:text-left">
+                <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2">ช่องทางชำระเงิน</p>
+                <div class="flex items-center justify-center sm:justify-start gap-2.5 bg-white/[0.03] px-4 py-2 rounded-lg border border-white/5">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]"></span>
+                    <p class="text-[10px] font-black text-white uppercase tracking-widest">WALLET TRANSFER</p>
                 </div>
             </div>
-            <div class="text-right">
-                <p class="text-[10px] font-black text-slate-500 uppercase mb-1">Total Authorization Amount</p>
-                <p class="total-amount">฿{{ order.total_price|floatformat:2 }}</p>
+
+            <div class="text-center sm:text-right">
+                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">ยอดชำระทั้งหมด</p>
+                <div class="flex items-baseline justify-center sm:justify-end gap-2">
+                    <p class="text-3xl sm:text-3xl font-black text-white italic tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">฿ {{ order.total_price|floatformat:2 }}</p>
+                    <span class="text-[14px] text-slate-400 font-black uppercase tracking-widest">เครดิต</span>
+                </div>
             </div>
         </div>
     </div>
-    
-    <div class="mt-10 flex gap-4">
-        <button onclick="window.print()" class="bg-white/5 hover:bg-white/10 text-white font-black py-4 px-10 rounded-xl border border-white/10 text-[10px] uppercase">
-            🖨️ Print Receipt
+
+    <div class="mt-10 flex flex-col sm:flex-row justify-end gap-4 no-print">
+        <button type="button" onclick="window.print()" class="w-full sm:w-auto bg-[#070A10] hover:bg-white/10 text-white font-black py-4 px-8 rounded-xl border border-white/10 text-[10px] uppercase tracking-widest transition-colors flex items-center justify-center gap-3">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+            </svg>
+            พิมพ์ใบเสร็จ
         </button>
-        <a href="{% url 'home' %}" class="btn-neon flex-grow text-center py-4 text-xs font-black uppercase tracking-widest">
-            Return to Hangar (Home)
+
+        <a href="/" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-black py-4 px-8 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] text-center text-[10px] uppercase tracking-[0.2em] flex items-center justify-center hover:-translate-y-1">
+            กลับหน้าแรก
         </a>
     </div>
 </div>
+
+<style>
+@media print {
+    body * { visibility: hidden; }
+    #receipt-container, #receipt-container * { visibility: visible; }
+    #receipt-container { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 20px; }
+    .no-print { display: none !important; }
+    .print-wrapper { border: 1px solid #ccc !important; box-shadow: none !important; background: white !important; }
+    * { color: black !important; text-shadow: none !important; }
+}
+</style>
 {% endblock %}

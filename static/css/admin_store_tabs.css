@@ -1,0 +1,108 @@
+.change-list table thead th {
+    background: #ece6db;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 11px;
+    border-bottom: 2px solid #bbae99;
+}
+
+.change-list table thead th a,
+.change-list table thead th .text a,
+.change-list table thead th .sortoptions a {
+    color: #000000 !important;
+    opacity: 1 !important;
+}
+
+.change-list table tbody tr:nth-child(even) {
+    background: #f8f5ef;
+}
+
+.change-list table tbody tr:hover {
+    background: #eef3fb;
+}
+
+.change-list table tbody td,
+.change-list table tbody th {
+    color: #14110f;
+    border-top: 1px solid #d3cbbd;
+}
+
+.change-list .results {
+    overflow-x: auto;
+}
+
+.app-store .module table,
+.app-store .module tbody,
+.app-store .module tr,
+.app-store .module th,
+.app-store .module td {
+    background: #ffffff;
+}
+
+.app-store .module tbody tr:nth-child(even) td,
+.app-store .module tbody tr:nth-child(even) th {
+    background: #f8f5ef;
+}
+
+.app-store .module a.addlink,
+.app-store .module a.changelink,
+.module a.addlink,
+.module a.changelink {
+    color: #1d4ed8;
+    font-weight: 700;
+}
+
+.admin-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.32rem 0.72rem;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.admin-chip-id {
+    background: #f2eee8;
+    color: #3d372f;
+    border-color: #d3c8b8;
+}
+
+.admin-chip-success {
+    background: #eef9ef;
+    color: #00ff59;
+    border-color: #bed8c3;
+}
+
+.admin-chip-info {
+    background: #eef4ff;
+    color: #1d4ed8;
+    border-color: #bfd2ff;
+}
+
+.admin-chip-warning {
+    background: #fff6e3;
+    color: #875409;
+    border-color: #e8d19b;
+}
+
+.admin-chip-danger {
+    background: #fff0ef;
+    color: #9e2a25;
+    border-color: #e8beb9;
+}
+
+.admin-chip-muted {
+    background: #f3f1ed;
+    color: #5b554d;
+    border-color: #d5cec3;
+}
+
+.admin-price {
+    font-weight: 800;
+    color: #875409;
+}
